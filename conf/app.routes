@@ -1,3 +1,9 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.partnershipidentification.controllers.MicroserviceHelloWorldController.hello
+POST        /journey                        uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.createJourney()
+
+GET         /journey/:journeyId             uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.getJourneyData(journeyId)
+GET         /journey/:journeyId/:dataKey    uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.getJourneyDataByKey(journeyId, dataKey)
+
+PUT         /journey/:journeyId/:dataKey    uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.updateJourneyData(journeyId, dataKey)
+
