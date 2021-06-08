@@ -25,7 +25,7 @@ import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
 import uk.gov.hmrc.partnershipidentification.models.PartnershipIdentificationModel
-import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository.{authInternalIdKey, journeyIdKey}
+import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository.{AuthInternalIdKey, JourneyIdKey}
 
 import java.time.Instant
 import javax.inject.{Inject, Singleton}
@@ -45,8 +45,8 @@ class JourneyDataRepository @Inject()(reactiveMongoComponent: ReactiveMongoCompo
   def createJourney(journeyId: String, authInternalId: String): Future[String] =
     collection.insert(true).one(
       Json.obj(
-        journeyIdKey -> journeyId,
-        authInternalIdKey -> authInternalId,
+        JourneyIdKey -> journeyId,
+        AuthInternalIdKey -> authInternalId,
         "creationTimestamp" -> Json.obj("$date" -> Instant.now.toEpochMilli)
       )
     ).map(_ => journeyId)
@@ -54,22 +54,35 @@ class JourneyDataRepository @Inject()(reactiveMongoComponent: ReactiveMongoCompo
   def getJourneyData(journeyId: String, authInternalId: String): Future[Option[JsObject]] =
     collection.find(
       Json.obj(
-        journeyIdKey -> journeyId,
-        authInternalIdKey -> authInternalId
+        JourneyIdKey -> journeyId,
+        AuthInternalIdKey -> authInternalId
       ),
       Some(Json.obj(
-        journeyIdKey -> 0
+        JourneyIdKey -> 0
       ))
     ).one[JsObject]
 
   def updateJourneyData(journeyId: String, dataKey: String, data: JsValue, authInternalId: String): Future[UpdateWriteResult] =
     collection.update(true).one(
       Json.obj(
-        journeyIdKey -> journeyId,
-        authInternalIdKey -> authInternalId
+        JourneyIdKey -> journeyId,
+        AuthInternalIdKey -> authInternalId
       ),
       Json.obj(
         "$set" -> Json.obj(dataKey -> data)
+      ),
+      upsert = false,
+      multi = false
+    ).filter(_.n == 1)
+
+  def removeJourneyDataField(journeyId: String, authInternalId: String, dataKey: String): Future[UpdateWriteResult] =
+    collection.update(true).one(
+      Json.obj(
+        JourneyIdKey -> journeyId,
+        AuthInternalIdKey -> authInternalId
+      ),
+      Json.obj(
+        "$unset" -> Json.obj(dataKey -> 1)
       ),
       upsert = false,
       multi = false
@@ -97,6 +110,6 @@ class JourneyDataRepository @Inject()(reactiveMongoComponent: ReactiveMongoCompo
 }
 
 object JourneyDataRepository {
-  val journeyIdKey: String = "_id"
-  val authInternalIdKey: String = "authInternalId"
+  val JourneyIdKey: String = "_id"
+  val AuthInternalIdKey: String = "authInternalId"
 }
