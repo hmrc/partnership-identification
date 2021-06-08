@@ -20,11 +20,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.internalId
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.http.InternalServerException
 import uk.gov.hmrc.partnershipidentification.services.JourneyDataService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class JourneyDataController @Inject()(cc: ControllerComponents,
@@ -41,7 +42,7 @@ class JourneyDataController @Inject()(cc: ControllerComponents,
             journeyId => Created(Json.obj(journeyIdKey -> journeyId))
           }
         case None =>
-          Future.successful(Unauthorized)
+          throw new InternalServerException("Internal ID could not be retrieved from Auth")
       }
   }
 
@@ -59,7 +60,7 @@ class JourneyDataController @Inject()(cc: ControllerComponents,
               ))
           }
         case None =>
-          Future.successful(Unauthorized)
+          throw new InternalServerException("Internal ID could not be retrieved from Auth")
       }
   }
 
@@ -73,7 +74,7 @@ class JourneyDataController @Inject()(cc: ControllerComponents,
               "reason" -> s"No data exists for either journey ID: $journeyId or data key: $dataKey"))
           }
         case None =>
-          Future.successful(Unauthorized)
+          throw new InternalServerException("Internal ID could not be retrieved from Auth")
       }
   }
 
@@ -85,7 +86,19 @@ class JourneyDataController @Inject()(cc: ControllerComponents,
             _ => Ok
           }
         case None =>
-          Future.successful(Unauthorized)
+          throw new InternalServerException("Internal ID could not be retrieved from Auth")
+      }
+  }
+
+  def removeJourneyDataField(journeyId: String, dataKey: String): Action[AnyContent] = Action.async {
+    implicit request =>
+      authorised().retrieve(internalId) {
+        case Some(internalId) =>
+          journeyDataService.removeJourneyDataField(journeyId, internalId, dataKey).map {
+            _ => NoContent
+          }
+        case None =>
+          throw new InternalServerException("Internal ID could not be retrieved from Auth")
       }
   }
 

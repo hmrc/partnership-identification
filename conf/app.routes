@@ -7,3 +7,4 @@ GET         /journey/:journeyId/:dataKey    uk.gov.hmrc.partnershipidentificatio
 
 PUT         /journey/:journeyId/:dataKey    uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.updateJourneyData(journeyId, dataKey)
 
+DELETE      /journey/:journeyId/:dataKey    uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.removeJourneyDataField(journeyId, dataKey)
