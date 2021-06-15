@@ -17,13 +17,14 @@
 package uk.gov.hmrc.partnershipidentification.config
 
 import play.api.Configuration
+import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubPartnershipKnownFacts}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AppConfig @Inject()(config: Configuration,
-                          servicesConfig: ServicesConfig) {
+                          servicesConfig: ServicesConfig) extends FeatureSwitching {
 
   val authBaseUrl: String = servicesConfig.baseUrl("auth")
 
@@ -31,4 +32,14 @@ class AppConfig @Inject()(config: Configuration,
   val graphiteHost: String = config.get[String]("microservice.metrics.graphite.host")
 
   lazy val timeToLiveSeconds: Long = servicesConfig.getString("mongodb.timeToLiveSeconds").toLong
+
+  lazy val desBaseUrl: String = servicesConfig.getString("microservice.services.des.url")
+
+  lazy val desStubBaseUrl: String = servicesConfig.getString("microservice.services.des.stub-url")
+
+  def getPartnershipKnownFactsUrl(sautr: String): String = {
+    val baseUrl: String = if(isEnabled(StubPartnershipKnownFacts)) desStubBaseUrl else desBaseUrl
+    s"$baseUrl/income-tax-self-assessment/known-facts/utr/$sautr"
+  }
+
 }
