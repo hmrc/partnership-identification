@@ -1,0 +1,5 @@
+GET        /api/feature-switches                                        uk.gov.hmrc.partnershipidentification.featureswitch.api.controllers.FeatureSwitchApiController.getFeatureSwitches()
+
+POST       /api/feature-switches                                        uk.gov.hmrc.partnershipidentification.featureswitch.api.controllers.FeatureSwitchApiController.updateFeatureSwitches()
+
+GET        /income-tax-self-assessment/known-facts/utr/:sautr           uk.gov.hmrc.partnershipidentification.testonly.PartnershipKnownFactsStubController.getPartnershipKnownFacts(sautr)
