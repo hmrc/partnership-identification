@@ -16,20 +16,12 @@
 
 package uk.gov.hmrc.partnershipidentification.models
 
-import play.api.libs.json._
+import play.api.libs.json.{Json, OFormat}
 
-case class PartnershipIdentificationModel(journeyId: String)
+case class PartnershipInformation(sautr: String, postCode: String)
 
-object PartnershipIdentificationModel {
+object PartnershipInformation {
 
-  implicit object MongoFormat extends OFormat[PartnershipIdentificationModel] {
-    override def writes(o: PartnershipIdentificationModel): JsObject =
-      Json.obj("_id" -> o.journeyId)
-
-    override def reads(json: JsValue): JsResult[PartnershipIdentificationModel] =
-      for {
-        journeyId <- (json \ "_id").validate[String]
-      } yield PartnershipIdentificationModel(journeyId)
-  }
+  implicit val format: OFormat[PartnershipInformation] = Json.format[PartnershipInformation]
 
 }

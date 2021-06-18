@@ -37,6 +37,11 @@ class AppConfig @Inject()(config: Configuration,
 
   lazy val desStubBaseUrl: String = servicesConfig.getString("microservice.services.des.stub-url")
 
+  lazy val desEnvironmentHeader: (String, String) =
+    "Environment" -> servicesConfig.getString("microservice.services.des.environment")
+
+  lazy val desAuthorisationToken: String = s"Bearer ${servicesConfig.getString("microservice.services.des.authorisation-token")}"
+
   def getPartnershipKnownFactsUrl(sautr: String): String = {
     val baseUrl: String = if(isEnabled(StubPartnershipKnownFacts)) desStubBaseUrl else desBaseUrl
     s"$baseUrl/income-tax-self-assessment/known-facts/utr/$sautr"

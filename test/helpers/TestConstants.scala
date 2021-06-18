@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.assets
+package helpers
 
 import java.util.UUID
 

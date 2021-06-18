@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.assets
+package uk.gov.hmrc.partnershipidentification.models
 
-import java.util.UUID
+import play.api.libs.json._
 
-object TestConstants {
+case class PartnershipIdentification(journeyId: String)
 
-  val testJourneyId: String = UUID.randomUUID().toString
-  val testInternalId: String = UUID.randomUUID().toString
-  val testSautr: String = "1234567890"
-  val testPostcode: String = "AA1 1AA"
-  val testCorrespondencePostCode: String = UUID.randomUUID().toString
-  val testBasePostCode: String = UUID.randomUUID().toString
-  val testCommsPostCode: String = UUID.randomUUID().toString
-  val testTraderPostCode: String = UUID.randomUUID().toString
+object PartnershipIdentification {
+
+  implicit object MongoFormat extends OFormat[PartnershipIdentification] {
+    override def writes(o: PartnershipIdentification): JsObject =
+      Json.obj("_id" -> o.journeyId)
+
+    override def reads(json: JsValue): JsResult[PartnershipIdentification] =
+      for {
+        journeyId <- (json \ "_id").validate[String]
+      } yield PartnershipIdentification(journeyId)
+  }
+
 }

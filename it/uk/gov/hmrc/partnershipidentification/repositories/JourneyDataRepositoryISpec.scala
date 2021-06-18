@@ -19,7 +19,7 @@ package uk.gov.hmrc.partnershipidentification.repositories
 import play.api.libs.json.{JsString, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants.{testInternalId, testJourneyId}
-import uk.gov.hmrc.partnershipidentification.models.PartnershipIdentificationModel
+import uk.gov.hmrc.partnershipidentification.models.PartnershipIdentification
 import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,7 +39,7 @@ class JourneyDataRepositoryISpec extends ComponentSpecHelper {
   "createJourney" should {
     "successfully insert the journeyId" in {
       await(repo.createJourney(testJourneyId, testInternalId))
-      await(repo.findById(testJourneyId)) mustBe Some(PartnershipIdentificationModel(testJourneyId))
+      await(repo.findById(testJourneyId)) mustBe Some(PartnershipIdentification(testJourneyId))
     }
   }
   s"getJourneyData($testJourneyId)" should {
