@@ -24,7 +24,7 @@ import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.models.PartnershipIdentificationModel
+import uk.gov.hmrc.partnershipidentification.models.PartnershipIdentification
 import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository.{AuthInternalIdKey, JourneyIdKey}
 
 import java.time.Instant
@@ -38,7 +38,7 @@ class JourneyDataRepository @Inject()(reactiveMongoComponent: ReactiveMongoCompo
   extends ReactiveRepository(
     collectionName = "partnership-identification",
     mongo = reactiveMongoComponent.mongoConnector.db,
-    domainFormat = PartnershipIdentificationModel.MongoFormat,
+    domainFormat = PartnershipIdentification.MongoFormat,
     idFormat = implicitly[Format[String]]
   ) {
 
