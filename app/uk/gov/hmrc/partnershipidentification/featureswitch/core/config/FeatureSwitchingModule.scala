@@ -25,7 +25,7 @@ import javax.inject.Singleton
 @Singleton
 class FeatureSwitchingModule extends Module with FeatureSwitchRegistry {
 
-  val switches = Seq(StubPartnershipKnownFacts)
+  val switches = Seq(StubPartnershipKnownFacts, StubRegisterWithIdentifiers)
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
@@ -37,5 +37,10 @@ class FeatureSwitchingModule extends Module with FeatureSwitchRegistry {
 case object StubPartnershipKnownFacts extends FeatureSwitch {
   override val configName: String = "feature-switch.partnership-known-facts-stub"
   override val displayName: String = "Use stub for Partnership Known Facts SAUTR call"
+}
+
+case object StubRegisterWithIdentifiers extends FeatureSwitch {
+  override val configName: String = "feature-switch.register-with-identifiers-stub"
+  override val displayName: String = "Use stub for register API"
 }
 
