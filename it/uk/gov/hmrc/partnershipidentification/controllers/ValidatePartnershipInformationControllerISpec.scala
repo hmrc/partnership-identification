@@ -24,7 +24,7 @@ import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
 class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper with PartnershipKnownFactsStub {
 
-  val testJson: JsObject = Json.obj("sautr" -> testSautr, "postCode" -> testPostcode)
+  val testJson: JsObject = Json.obj("sautr" -> testSautr, "postcode" -> testPostcode)
 
   "POST /validate-partnership-information" should {
     "return 'identifiersMatch: true" when {
@@ -40,7 +40,7 @@ class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper 
 
     "return 'identifiersMatch: false" when {
       "the data provided does not match what is held downstream" in {
-        val testJson: JsObject = Json.obj("sautr" -> testSautr, "postCode" -> "AB1 1AB")
+        val testJson: JsObject = Json.obj("sautr" -> testSautr, "postcode" -> "AB1 1AB")
         stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
 
         val result = post("/validate-partnership-information")(testJson)
