@@ -26,7 +26,7 @@ object GetPartnershipKnownFactsHttpParser {
   val postCodeKey = "postCode"
 
   val correspondenceDetailsKey = "correspondenceDetails"
-  val correspondencePostCodeKey = "corresPostCode"
+  val correspondencePostCodeKey = "correspondencePostCode"
 
   val basePostCodeKey = "basePostCode"
 
