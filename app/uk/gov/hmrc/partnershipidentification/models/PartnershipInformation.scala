@@ -18,7 +18,7 @@ package uk.gov.hmrc.partnershipidentification.models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class PartnershipInformation(sautr: String, postCode: String)
+case class PartnershipInformation(sautr: String, postcode: String)
 
 object PartnershipInformation {
 

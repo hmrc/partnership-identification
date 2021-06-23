@@ -35,7 +35,7 @@ class ValidatePartnershipInformationController @Inject()(validatePartnershipInfo
     implicit request =>
       val identifiersMatchKey = "identifiersMatch"
 
-      validatePartnershipInformationService.validate(request.body.sautr, request.body.postCode).map {
+      validatePartnershipInformationService.validate(request.body.sautr, request.body.postcode).map {
         case Right(PostCodeMatched) =>
           Ok(Json.obj(identifiersMatchKey -> true))
         case _ =>
