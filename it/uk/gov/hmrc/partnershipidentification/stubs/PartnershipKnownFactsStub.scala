@@ -39,7 +39,7 @@ trait PartnershipKnownFactsStub extends WiremockMethods {
   val fullPartnershipKnownFactsBody: JsObject = Json.obj(
     "postCode" -> testPostcode,
     "correspondenceDetails" -> Json.obj(
-      "corresPostCode" -> testCorrespondencePostCode
+      "correspondencePostCode" -> testCorrespondencePostCode
     ),
     "basePostCode" -> testBasePostCode,
     "commsPostCode" -> testCommsPostCode,
