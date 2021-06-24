@@ -22,6 +22,7 @@ object TestConstants {
 
   val testJourneyId: String = UUID.randomUUID().toString
   val testInternalId: String = UUID.randomUUID().toString
+  val testSafeId: String = UUID.randomUUID().toString
   val testSautr: String = "1234567890"
   val testPostcode: String = "AA1 1AA"
   val testCorrespondencePostCode: String = UUID.randomUUID().toString
