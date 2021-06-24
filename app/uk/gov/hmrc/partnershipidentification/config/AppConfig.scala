@@ -17,7 +17,7 @@
 package uk.gov.hmrc.partnershipidentification.config
 
 import play.api.Configuration
-import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubPartnershipKnownFacts}
+import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubPartnershipKnownFacts, StubRegisterWithIdentifiers}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
@@ -45,6 +45,10 @@ class AppConfig @Inject()(config: Configuration,
   def getPartnershipKnownFactsUrl(sautr: String): String = {
     val baseUrl: String = if(isEnabled(StubPartnershipKnownFacts)) desStubBaseUrl else desBaseUrl
     s"$baseUrl/income-tax-self-assessment/known-facts/utr/$sautr"
+  }
+  lazy val getRegisterWithMultipleIdentifiersUrl: String = {
+    val baseUrl = if (isEnabled(StubRegisterWithIdentifiers)) desStubBaseUrl else desBaseUrl
+    s"$baseUrl/cross-regime/register/VATC"
   }
 
 }

@@ -10,3 +10,5 @@ PUT         /journey/:journeyId/:dataKey                    uk.gov.hmrc.partners
 DELETE      /journey/:journeyId/:dataKey                    uk.gov.hmrc.partnershipidentification.controllers.JourneyDataController.removeJourneyDataField(journeyId, dataKey)
 
 POST        /validate-partnership-information               uk.gov.hmrc.partnershipidentification.controllers.ValidatePartnershipInformationController.validate
+
+POST        /register                                       uk.gov.hmrc.partnershipidentification.controllers.RegisterBusinessEntityController.register()
