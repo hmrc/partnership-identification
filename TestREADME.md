@@ -54,3 +54,25 @@ Example response body:
       "dateOfBirth": "2012-12-12"
     }
 ```
+
+#### POST /cross-regime/register/VATC
+
+Stubs the call to the Register with Multiple Identifiers API to either create/match the business' identifiers with a BPR (Business partner record). The following Feature Switch will need to be enabled: `Use stub for register API`
+
+##### Request:
+
+No body is required for this request as this always returns a successful response regardless of the data sent.
+
+##### Response:
+Status: **OK(200)**
+
+Example Response body: 
+
+```
+{
+"identification":{
+                  "idType":"SAFEID",
+                  "idValue":"X00000123456789"
+                 }
+}
+```
