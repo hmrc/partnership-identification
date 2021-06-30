@@ -40,7 +40,7 @@ class RegisterWithMultipleIdentifiersConnector @Inject()(http: HttpClient,
 
     val jsonBody: JsObject =
       Json.obj(
-        "partnership" ->
+        "ordinaryPartnership" ->
           Json.obj(
             "sautr" -> sautr
           )

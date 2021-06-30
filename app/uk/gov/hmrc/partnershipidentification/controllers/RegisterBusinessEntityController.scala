@@ -35,7 +35,7 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
   def register(): Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       authorised() {
-        val sautr = (request.body \ "partnership" \ "sautr").as[String]
+        val sautr = (request.body \ "ordinaryPartnership" \ "sautr").as[String]
         registerWithMultipleIdentifiersService.register(sautr).map {
           case RegisterWithMultipleIdentifiersSuccess(safeId) =>
             Ok(Json.obj(

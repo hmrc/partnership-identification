@@ -18,7 +18,6 @@ package uk.gov.hmrc.partnershipidentification.stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
 import uk.gov.hmrc.partnershipidentification.utils.WiremockMethods
 
 trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
@@ -40,7 +39,7 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
     )
 
   def stubRegisterWithMultipleIdentifiersSuccess(sautr: String)(status: Int, safeId: String): StubMapping = {
-    val postBody = Json.obj("partnership" ->
+    val postBody = Json.obj("ordinaryPartnership" ->
       Json.obj("sautr" -> sautr
       )
     )
@@ -52,7 +51,7 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
   }
 
   def stubRegisterWithMultipleIdentifiersFailure(sautr: String)(status: Int): StubMapping = {
-    val postBody = Json.obj("partnership" ->
+    val postBody = Json.obj("ordinaryPartnership" ->
       Json.obj("sautr" -> sautr
       ))
     when(method = POST, uri = "/cross-regime/register/VATC", postBody)

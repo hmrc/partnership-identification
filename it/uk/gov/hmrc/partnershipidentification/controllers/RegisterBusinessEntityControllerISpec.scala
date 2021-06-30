@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.partnershipidentification.controllers
 
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
+import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
 import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
@@ -32,7 +32,7 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         stubRegisterWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
 
         val jsonBody = Json.obj(
-          "partnership" -> Json.obj(
+          "ordinaryPartnership" -> Json.obj(
             "sautr" -> testSautr
           )
         )
@@ -53,13 +53,13 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         stubRegisterWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
-          "partnership" -> Json.obj(
+          "ordinaryPartnership" -> Json.obj(
             "sautr" -> testSautr
           )
         )
         val resultJson = Json.obj(
           "registration" -> Json.obj(
-          "registrationStatus" -> "REGISTRATION_FAILED"))
+            "registrationStatus" -> "REGISTRATION_FAILED"))
 
         val result = post("/register")(jsonBody)
         result.status mustBe OK
