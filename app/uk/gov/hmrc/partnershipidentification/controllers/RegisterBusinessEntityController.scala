@@ -32,11 +32,11 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
                                                  val authConnector: AuthConnector
                                                 )(implicit ec: ExecutionContext) extends BackendController(cc) with AuthorisedFunctions {
 
-  def register(): Action[JsValue] = Action.async(parse.json) {
+  def registerGeneralPartnership(): Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       authorised() {
         val sautr = (request.body \ "ordinaryPartnership" \ "sautr").as[String]
-        registerWithMultipleIdentifiersService.register(sautr).map {
+        registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr).map {
           case RegisterWithMultipleIdentifiersSuccess(safeId) =>
             Ok(Json.obj(
               "registration" -> Json.obj(
@@ -46,10 +46,24 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
             Ok(Json.obj(
               "registration" -> Json.obj(
                 "registrationStatus" -> "REGISTRATION_FAILED")))
-
         }
-
       }
-
+  }
+  def registerScottishPartnership(): Action[JsValue] = Action.async(parse.json) {
+    implicit request =>
+      authorised() {
+        val sautr = (request.body \ "scottishPartnership" \ "sautr").as[String]
+        registerWithMultipleIdentifiersService.registerScottishPartnership(sautr).map {
+          case RegisterWithMultipleIdentifiersSuccess(safeId) =>
+            Ok(Json.obj(
+              "registration" -> Json.obj(
+                "registrationStatus" -> "REGISTERED",
+                "registeredBusinessPartnerId" -> safeId)))
+          case RegisterWithMultipleIdentifiersFailure(status, body) =>
+            Ok(Json.obj(
+              "registration" -> Json.obj(
+                "registrationStatus" -> "REGISTRATION_FAILED")))
+        }
+      }
   }
 }

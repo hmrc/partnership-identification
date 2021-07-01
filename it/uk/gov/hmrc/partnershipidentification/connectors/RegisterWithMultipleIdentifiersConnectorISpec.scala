@@ -39,8 +39,8 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         "the Registration was a success on the Register API" in {
           disable(StubRegisterWithIdentifiers)
 
-          stubRegisterWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
-          val result = connector.register(testSautr)
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
+          val result = connector.register(testGeneralPartnershipjsonBody)
           await(result) mustBe (RegisterWithMultipleIdentifiersSuccess(testSafeId))
         }
       }
@@ -50,8 +50,8 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         "the Registration was a success on the Register API stub" in {
           enable(StubRegisterWithIdentifiers)
 
-          stubRegisterWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
-          val result = connector.register(testSautr)
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
+          val result = connector.register(testGeneralPartnershipjsonBody)
           await(result) mustBe (RegisterWithMultipleIdentifiersSuccess(testSafeId))
         }
       }
@@ -61,8 +61,8 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         "the Registration was a failure on the Register API stub" in {
           enable(StubRegisterWithIdentifiers)
 
-          stubRegisterWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
-          val result = connector.register(testSautr)
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
+          val result = connector.register(testGeneralPartnershipjsonBody)
           await(result) mustBe RegisterWithMultipleIdentifiersFailure(BAD_REQUEST, Json.obj(
             "code" -> "INVALID_PAYLOAD",
             "reason" -> "Request has not passed validation. Invalid Payload."

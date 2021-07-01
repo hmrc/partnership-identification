@@ -38,7 +38,7 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
       "reason" -> "Request has not passed validation. Invalid Payload."
     )
 
-  def stubRegisterWithMultipleIdentifiersSuccess(sautr: String)(status: Int, safeId: String): StubMapping = {
+  def stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(sautr: String)(status: Int, safeId: String): StubMapping = {
     val postBody = Json.obj("ordinaryPartnership" ->
       Json.obj("sautr" -> sautr
       )
@@ -50,8 +50,30 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
       )
   }
 
-  def stubRegisterWithMultipleIdentifiersFailure(sautr: String)(status: Int): StubMapping = {
+  def stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(sautr: String)(status: Int): StubMapping = {
     val postBody = Json.obj("ordinaryPartnership" ->
+      Json.obj("sautr" -> sautr
+      ))
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseFailureBody()
+      )
+  }
+  def stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(sautr: String)(status: Int, safeId: String): StubMapping = {
+    val postBody = Json.obj("scottishPartnership" ->
+      Json.obj("sautr" -> sautr
+      )
+    )
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseSuccessBody(safeId)
+      )
+  }
+
+  def stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(sautr: String)(status: Int): StubMapping = {
+    val postBody = Json.obj("scottishPartnership" ->
       Json.obj("sautr" -> sautr
       ))
     when(method = POST, uri = "/cross-regime/register/VATC", postBody)

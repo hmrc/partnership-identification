@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.partnershipidentification.services
 
+import play.api.libs.json.{JsObject, Json}
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersConnector
@@ -26,7 +28,24 @@ import scala.concurrent.Future
 @Singleton
 class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdentifiersConnector: RegisterWithMultipleIdentifiersConnector) {
 
-  def register(sautr: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] =
-    registerWithMultipleIdentifiersConnector.register(sautr)
-
+  def registerGeneralPartnership(sautr: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+    val jsonBody: JsObject =
+      Json.obj(
+        "ordinaryPartnership" ->
+          Json.obj(
+            "sautr" -> sautr
+          )
+      )
+    registerWithMultipleIdentifiersConnector.register(jsonBody)
+  }
+  def registerScottishPartnership(sautr: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+    val jsonBody: JsObject =
+      Json.obj(
+        "scottishPartnership" ->
+          Json.obj(
+            "sautr" -> sautr
+          )
+      )
+    registerWithMultipleIdentifiersConnector.register(jsonBody)
+  }
 }

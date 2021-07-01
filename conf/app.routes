@@ -11,4 +11,6 @@ DELETE      /journey/:journeyId/:dataKey                    uk.gov.hmrc.partners
 
 POST        /validate-partnership-information               uk.gov.hmrc.partnershipidentification.controllers.ValidatePartnershipInformationController.validate
 
-POST        /register                                       uk.gov.hmrc.partnershipidentification.controllers.RegisterBusinessEntityController.register()
+POST        /register-general-partnership                  uk.gov.hmrc.partnershipidentification.controllers.RegisterBusinessEntityController.registerGeneralPartnership()
+
+POST        /register-scottish-partnership                  uk.gov.hmrc.partnershipidentification.controllers.RegisterBusinessEntityController.registerScottishPartnership()

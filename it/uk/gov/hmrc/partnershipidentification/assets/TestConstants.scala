@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.partnershipidentification.assets
 
+import play.api.libs.json.{JsObject, Json}
+
 import java.util.UUID
 
 object TestConstants {
@@ -29,4 +31,12 @@ object TestConstants {
   val testBasePostCode: String = UUID.randomUUID().toString
   val testCommsPostCode: String = UUID.randomUUID().toString
   val testTraderPostCode: String = UUID.randomUUID().toString
+
+  val testGeneralPartnershipjsonBody: JsObject =
+    Json.obj(
+      "ordinaryPartnership" ->
+        Json.obj(
+          "sautr" -> testSautr
+        )
+    )
 }
