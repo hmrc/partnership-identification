@@ -29,7 +29,7 @@ class RegisterWithMultipleIdentifiersConnector @Inject()(http: HttpClient,
                                                          appConfig: AppConfig
                                                         )(implicit ec: ExecutionContext) {
 
-  def register(sautr: String
+  def register(jsonBody: JsObject
               )(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
 
     val extraHeaders = Seq(
@@ -38,13 +38,7 @@ class RegisterWithMultipleIdentifiersConnector @Inject()(http: HttpClient,
       "Content-Type" -> "application/json"
     )
 
-    val jsonBody: JsObject =
-      Json.obj(
-        "ordinaryPartnership" ->
-          Json.obj(
-            "sautr" -> sautr
-          )
-      )
+
 
     http.POST[JsObject, RegisterWithMultipleIdentifiersResult](
       url = appConfig.getRegisterWithMultipleIdentifiersUrl,
