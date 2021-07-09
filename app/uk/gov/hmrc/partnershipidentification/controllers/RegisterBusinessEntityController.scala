@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.partnershipidentification.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser.{RegisterWithMultipleIdentifiersFailure, RegisterWithMultipleIdentifiersSuccess}
+import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser._
 import uk.gov.hmrc.partnershipidentification.services.RegisterWithMultipleIdentifiersService
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -32,34 +32,39 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
                                                  val authConnector: AuthConnector
                                                 )(implicit ec: ExecutionContext) extends BackendController(cc) with AuthorisedFunctions {
 
-  def registerGeneralPartnership(): Action[JsValue] = Action.async(parse.json) {
-    implicit request =>
-      authorised() {
-        val sautr = (request.body \ "ordinaryPartnership" \ "sautr").as[String]
-        registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr).map {
-          case RegisterWithMultipleIdentifiersSuccess(safeId) =>
-            Ok(Json.obj(
-              "registration" -> Json.obj(
-                "registrationStatus" -> "REGISTERED",
-                "registeredBusinessPartnerId" -> safeId)))
-          case RegisterWithMultipleIdentifiersFailure(status, body) =>
-            Ok(Json.obj(
-              "registration" -> Json.obj(
-                "registrationStatus" -> "REGISTRATION_FAILED")))
+  def registerGeneralPartnership(): Action[String] =
+    Action.async(parse.json[String](json => (json \ "sautr").validate[String])) {
+      implicit request =>
+        authorised() {
+          val sautr = request.body
+
+          registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr).map {
+            case RegisterWithMultipleIdentifiersSuccess(safeId) =>
+              Ok(Json.obj(
+                "registration" -> Json.obj(
+                  "registrationStatus" -> "REGISTERED",
+                  "registeredBusinessPartnerId" -> safeId)))
+            case _ =>
+              Ok(Json.obj(
+                "registration" -> Json.obj(
+                  "registrationStatus" -> "REGISTRATION_FAILED")))
+          }
         }
-      }
-  }
-  def registerScottishPartnership(): Action[JsValue] = Action.async(parse.json) {
+    }
+
+  def registerScottishPartnership(): Action[String] =
+    Action.async(parse.json[String](json => (json \ "sautr").validate[String])) {
     implicit request =>
       authorised() {
-        val sautr = (request.body \ "scottishPartnership" \ "sautr").as[String]
+        val sautr = request.body
+
         registerWithMultipleIdentifiersService.registerScottishPartnership(sautr).map {
           case RegisterWithMultipleIdentifiersSuccess(safeId) =>
             Ok(Json.obj(
               "registration" -> Json.obj(
                 "registrationStatus" -> "REGISTERED",
                 "registeredBusinessPartnerId" -> safeId)))
-          case RegisterWithMultipleIdentifiersFailure(status, body) =>
+          case _ =>
             Ok(Json.obj(
               "registration" -> Json.obj(
                 "registrationStatus" -> "REGISTRATION_FAILED")))
