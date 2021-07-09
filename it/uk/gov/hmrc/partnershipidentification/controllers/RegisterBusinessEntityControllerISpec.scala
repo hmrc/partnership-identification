@@ -32,9 +32,7 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
 
         val jsonBody = Json.obj(
-          "ordinaryPartnership" -> Json.obj(
-            "sautr" -> testSautr
-          )
+          "sautr" -> testSautr
         )
 
         val resultJson = Json.obj(
@@ -53,9 +51,7 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
-          "ordinaryPartnership" -> Json.obj(
-            "sautr" -> testSautr
-          )
+          "sautr" -> testSautr
         )
         val resultJson = Json.obj(
           "registration" -> Json.obj(
@@ -75,9 +71,7 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
 
         val jsonBody = Json.obj(
-          "scottishPartnership" -> Json.obj(
-            "sautr" -> testSautr
-          )
+          "sautr" -> testSautr
         )
 
         val resultJson = Json.obj(
@@ -96,9 +90,7 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
-          "scottishPartnership" -> Json.obj(
-            "sautr" -> testSautr
-          )
+          "sautr" -> testSautr
         )
         val resultJson = Json.obj(
           "registration" -> Json.obj(
