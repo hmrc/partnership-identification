@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,12 +38,49 @@ class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdent
       )
     registerWithMultipleIdentifiersConnector.register(jsonBody)
   }
+
   def registerScottishPartnership(sautr: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
     val jsonBody: JsObject =
       Json.obj(
         "scottishPartnership" ->
           Json.obj(
             "sautr" -> sautr
+          )
+      )
+    registerWithMultipleIdentifiersConnector.register(jsonBody)
+  }
+
+  def registerLimitedPartnership(sautr: String, companyNumber: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+    val jsonBody: JsObject =
+      Json.obj(
+        "limitedPartnership" ->
+          Json.obj(
+            "sautr" -> sautr,
+            "crn" -> companyNumber
+          )
+      )
+    registerWithMultipleIdentifiersConnector.register(jsonBody)
+  }
+
+  def registerLimitedLiabilityPartnership(sautr: String, companyNumber: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+    val jsonBody: JsObject =
+      Json.obj(
+        "limitedLiabilityPartnership" ->
+          Json.obj(
+            "sautr" -> sautr,
+            "crn" -> companyNumber
+          )
+      )
+    registerWithMultipleIdentifiersConnector.register(jsonBody)
+  }
+
+  def registerScottishLimitedPartnership(sautr: String, companyNumber: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+    val jsonBody: JsObject =
+      Json.obj(
+        "scottishLimitedPartnership" ->
+          Json.obj(
+            "sautr" -> sautr,
+            "crn" -> companyNumber
           )
       )
     registerWithMultipleIdentifiersConnector.register(jsonBody)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,6 +97,132 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
             "registrationStatus" -> "REGISTRATION_FAILED"))
 
         val result = post("/register-scottish-partnership")(jsonBody)
+        result.status mustBe OK
+        result.json mustBe resultJson
+
+      }
+    }
+  }
+  "POST /register-limited-partnership" should {
+    "return OK with status Registered and the SafeId" when {
+      "the Registration was a success" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
+        stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber
+        )
+
+        val resultJson = Json.obj(
+          "registration" -> Json.obj(
+            "registrationStatus" -> "REGISTERED",
+            "registeredBusinessPartnerId" -> testSafeId))
+
+        val result = post("/register-limited-partnership")(jsonBody)
+        result.status mustBe OK
+        result.json mustBe resultJson
+      }
+    }
+    "return OK with status Registration_Failed" when {
+      "the Registration was not successful" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
+        stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber)(BAD_REQUEST)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber
+        )
+
+        val resultJson = Json.obj(
+          "registration" -> Json.obj(
+            "registrationStatus" -> "REGISTRATION_FAILED"))
+
+        val result = post("/register-limited-partnership")(jsonBody)
+        result.status mustBe OK
+        result.json mustBe resultJson
+
+      }
+    }
+  }
+  "POST /register-limited-liability-partnership" should {
+    "return OK with status Registered and the SafeId" when {
+      "the Registration was a success" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
+        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber
+        )
+
+        val resultJson = Json.obj(
+          "registration" -> Json.obj(
+            "registrationStatus" -> "REGISTERED",
+            "registeredBusinessPartnerId" -> testSafeId))
+
+        val result = post("/register-limited-liability-partnership")(jsonBody)
+        result.status mustBe OK
+        result.json mustBe resultJson
+      }
+    }
+    "return OK with status Registration_Failed" when {
+      "the Registration was not successful" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
+        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber)(BAD_REQUEST)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber
+        )
+
+        val resultJson = Json.obj(
+          "registration" -> Json.obj(
+            "registrationStatus" -> "REGISTRATION_FAILED"))
+
+        val result = post("/register-limited-liability-partnership")(jsonBody)
+        result.status mustBe OK
+        result.json mustBe resultJson
+
+      }
+    }
+  }
+  "POST /register-scottish-limited-partnership" should {
+    "return OK with status Registered and the SafeId" when {
+      "the Registration was a success" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
+        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber
+        )
+
+        val resultJson = Json.obj(
+          "registration" -> Json.obj(
+            "registrationStatus" -> "REGISTERED",
+            "registeredBusinessPartnerId" -> testSafeId))
+
+        val result = post("/register-scottish-limited-partnership")(jsonBody)
+        result.status mustBe OK
+        result.json mustBe resultJson
+      }
+    }
+    "return OK with status Registration_Failed" when {
+      "the Registration was not successful" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
+        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber)(BAD_REQUEST)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber
+        )
+
+        val resultJson = Json.obj(
+          "registration" -> Json.obj(
+            "registrationStatus" -> "REGISTRATION_FAILED"))
+
+        val result = post("/register-scottish-limited-partnership")(jsonBody)
         result.status mustBe OK
         result.json mustBe resultJson
 

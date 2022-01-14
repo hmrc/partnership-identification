@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package uk.gov.hmrc.partnershipidentification.controllers
 
 import play.api.libs.json.Json
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.mvc.{Action, ControllerComponents, Result}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser._
 import uk.gov.hmrc.partnershipidentification.services.RegisterWithMultipleIdentifiersService
@@ -33,42 +33,66 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
                                                 )(implicit ec: ExecutionContext) extends BackendController(cc) with AuthorisedFunctions {
 
   def registerGeneralPartnership(): Action[String] =
-    Action.async(parse.json[String](json => (json \ "sautr").validate[String])) {
-      implicit request =>
-        authorised() {
-          val sautr = request.body
+    Action.async(parse.json[String](
+      json => (json \ "sautr").validate[String]
+    ))(implicit request => authorised() {
+      val sautr = request.body
 
-          registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr).map {
-            case RegisterWithMultipleIdentifiersSuccess(safeId) =>
-              Ok(Json.obj(
-                "registration" -> Json.obj(
-                  "registrationStatus" -> "REGISTERED",
-                  "registeredBusinessPartnerId" -> safeId)))
-            case _ =>
-              Ok(Json.obj(
-                "registration" -> Json.obj(
-                  "registrationStatus" -> "REGISTRATION_FAILED")))
-          }
-        }
-    }
+      registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr).map(handleRegisterResponse)
+    })
 
   def registerScottishPartnership(): Action[String] =
-    Action.async(parse.json[String](json => (json \ "sautr").validate[String])) {
-    implicit request =>
-      authorised() {
-        val sautr = request.body
+    Action.async(parse.json[String](
+      json => (json \ "sautr").validate[String]
+    ))(implicit request => authorised() {
+      val sautr = request.body
 
-        registerWithMultipleIdentifiersService.registerScottishPartnership(sautr).map {
-          case RegisterWithMultipleIdentifiersSuccess(safeId) =>
-            Ok(Json.obj(
-              "registration" -> Json.obj(
-                "registrationStatus" -> "REGISTERED",
-                "registeredBusinessPartnerId" -> safeId)))
-          case _ =>
-            Ok(Json.obj(
-              "registration" -> Json.obj(
-                "registrationStatus" -> "REGISTRATION_FAILED")))
-        }
-      }
+      registerWithMultipleIdentifiersService.registerScottishPartnership(sautr).map(handleRegisterResponse)
+    })
+
+  def registerLimitedPartnership(): Action[(String, String)] =
+    Action.async(parse.json[(String, String)](json => for {
+      sautr <- (json \ "sautr").validate[String]
+      companyNumber <- (json \ "companyNumber").validate[String]
+    } yield (sautr, companyNumber)
+    ))(implicit request => authorised() {
+      val (sautr, companyNumber) = request.body
+
+      registerWithMultipleIdentifiersService.registerLimitedPartnership(sautr, companyNumber).map(handleRegisterResponse)
+    })
+
+  def registerLimitedLiabilityPartnership(): Action[(String, String)] =
+    Action.async(parse.json[(String, String)](json => for {
+      sautr <- (json \ "sautr").validate[String]
+      companyNumber <- (json \ "companyNumber").validate[String]
+    } yield (sautr, companyNumber)
+    ))(implicit request => authorised() {
+      val (sautr, companyNumber) = request.body
+
+      registerWithMultipleIdentifiersService.registerLimitedLiabilityPartnership(sautr, companyNumber).map(handleRegisterResponse)
+    })
+
+  def registerScottishLimitedPartnership(): Action[(String, String)] =
+    Action.async(parse.json[(String, String)](json => for {
+      sautr <- (json \ "sautr").validate[String]
+      companyNumber <- (json \ "companyNumber").validate[String]
+    } yield (sautr, companyNumber)
+    ))(implicit request => authorised() {
+      val (sautr, companyNumber) = request.body
+
+      registerWithMultipleIdentifiersService.registerScottishLimitedPartnership(sautr, companyNumber).map(handleRegisterResponse)
+    })
+
+  private def handleRegisterResponse(registerResult: RegisterWithMultipleIdentifiersResult): Result = registerResult match {
+    case RegisterWithMultipleIdentifiersSuccess(safeId) =>
+      Ok(Json.obj(
+        "registration" -> Json.obj(
+          "registrationStatus" -> "REGISTERED",
+          "registeredBusinessPartnerId" -> safeId)))
+    case _ =>
+      Ok(Json.obj(
+        "registration" -> Json.obj(
+          "registrationStatus" -> "REGISTRATION_FAILED"))
+      )
   }
 }

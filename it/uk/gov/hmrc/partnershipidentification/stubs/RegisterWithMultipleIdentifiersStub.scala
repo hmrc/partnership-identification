@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,6 +76,92 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
     val postBody = Json.obj("scottishPartnership" ->
       Json.obj("sautr" -> sautr
       ))
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseFailureBody()
+      )
+  }
+
+  def stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String)(status: Int, safeId: String): StubMapping = {
+    val postBody = Json.obj("limitedPartnership" ->
+      Json.obj(
+        "sautr" -> sautr,
+        "crn" -> companyNumber
+      )
+    )
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseSuccessBody(safeId)
+      )
+  }
+
+  def stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String)(status: Int): StubMapping = {
+    val postBody = Json.obj("limitedPartnership" ->
+      Json.obj(
+        "sautr" -> sautr,
+        "crn" -> companyNumber
+      )
+    )
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseFailureBody()
+      )
+  }
+
+
+  def stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String)(status: Int, safeId: String): StubMapping = {
+    val postBody = Json.obj("limitedLiabilityPartnership" ->
+      Json.obj(
+        "sautr" -> sautr,
+        "crn" -> companyNumber
+      )
+    )
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseSuccessBody(safeId)
+      )
+  }
+
+  def stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String)(status: Int): StubMapping = {
+    val postBody = Json.obj("limitedLiabilityPartnership" ->
+      Json.obj(
+        "sautr" -> sautr,
+        "crn" -> companyNumber
+      )
+    )
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseFailureBody()
+      )
+  }
+
+
+  def stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String)(status: Int, safeId: String): StubMapping = {
+    val postBody = Json.obj("scottishLimitedPartnership" ->
+      Json.obj(
+        "sautr" -> sautr,
+        "crn" -> companyNumber
+      )
+    )
+    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+      .thenReturn(
+        status = status,
+        body = registerResponseSuccessBody(safeId)
+      )
+  }
+
+  def stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String)(status: Int): StubMapping = {
+    val postBody = Json.obj("scottishLimitedPartnership" ->
+      Json.obj(
+        "sautr" -> sautr,
+        "crn" -> companyNumber
+      )
+    )
     when(method = POST, uri = "/cross-regime/register/VATC", postBody)
       .thenReturn(
         status = status,
