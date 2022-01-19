@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 @Singleton
 class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponents: ControllerComponents) extends BackendController(controllerComponents) {
 
-  val registerWithMultipleIdentifiers: Action[AnyContent] = Action {
+  def registerWithMultipleIdentifiers(regime: String): Action[AnyContent] = Action {
     val stubbedSafeId = "X00000123456789"
 
     Ok(Json.obj(

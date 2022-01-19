@@ -32,55 +32,62 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
                                                  val authConnector: AuthConnector
                                                 )(implicit ec: ExecutionContext) extends BackendController(cc) with AuthorisedFunctions {
 
-  def registerGeneralPartnership(): Action[String] =
-    Action.async(parse.json[String](
-      json => (json \ "sautr").validate[String]
-    ))(implicit request => authorised() {
-      val sautr = request.body
-
-      registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr).map(handleRegisterResponse)
-    })
-
-  def registerScottishPartnership(): Action[String] =
-    Action.async(parse.json[String](
-      json => (json \ "sautr").validate[String]
-    ))(implicit request => authorised() {
-      val sautr = request.body
-
-      registerWithMultipleIdentifiersService.registerScottishPartnership(sautr).map(handleRegisterResponse)
-    })
-
-  def registerLimitedPartnership(): Action[(String, String)] =
+  def registerGeneralPartnership(): Action[(String, String)] =
     Action.async(parse.json[(String, String)](json => for {
       sautr <- (json \ "sautr").validate[String]
-      companyNumber <- (json \ "companyNumber").validate[String]
-    } yield (sautr, companyNumber)
+      regime <- (json \ "regime").validate[String]
+    } yield (sautr, regime)
     ))(implicit request => authorised() {
-      val (sautr, companyNumber) = request.body
+      val (sautr, regime) = request.body
 
-      registerWithMultipleIdentifiersService.registerLimitedPartnership(sautr, companyNumber).map(handleRegisterResponse)
+      registerWithMultipleIdentifiersService.registerGeneralPartnership(sautr, regime).map(handleRegisterResponse)
     })
 
-  def registerLimitedLiabilityPartnership(): Action[(String, String)] =
+  def registerScottishPartnership(): Action[(String, String)] =
     Action.async(parse.json[(String, String)](json => for {
       sautr <- (json \ "sautr").validate[String]
-      companyNumber <- (json \ "companyNumber").validate[String]
-    } yield (sautr, companyNumber)
+      regime <- (json \ "regime").validate[String]
+    } yield (sautr, regime)
     ))(implicit request => authorised() {
-      val (sautr, companyNumber) = request.body
+      val (sautr, regime) = request.body
 
-      registerWithMultipleIdentifiersService.registerLimitedLiabilityPartnership(sautr, companyNumber).map(handleRegisterResponse)
+      registerWithMultipleIdentifiersService.registerScottishPartnership(sautr, regime).map(handleRegisterResponse)
     })
 
-  def registerScottishLimitedPartnership(): Action[(String, String)] =
-    Action.async(parse.json[(String, String)](json => for {
+  def registerLimitedPartnership(): Action[(String, String, String)] =
+    Action.async(parse.json[(String, String, String)](json => for {
       sautr <- (json \ "sautr").validate[String]
       companyNumber <- (json \ "companyNumber").validate[String]
-    } yield (sautr, companyNumber)
+      regime <- (json \ "regime").validate[String]
+    } yield (sautr, companyNumber, regime)
     ))(implicit request => authorised() {
-      val (sautr, companyNumber) = request.body
+      val (sautr, companyNumber, regime) = request.body
 
-      registerWithMultipleIdentifiersService.registerScottishLimitedPartnership(sautr, companyNumber).map(handleRegisterResponse)
+      registerWithMultipleIdentifiersService.registerLimitedPartnership(sautr, companyNumber, regime).map(handleRegisterResponse)
+    })
+
+  def registerLimitedLiabilityPartnership(): Action[(String, String, String)] =
+    Action.async(parse.json[(String, String, String)](json => for {
+      sautr <- (json \ "sautr").validate[String]
+      companyNumber <- (json \ "companyNumber").validate[String]
+      regime <- (json \ "regime").validate[String]
+    } yield (sautr, companyNumber, regime)
+    ))(implicit request => authorised() {
+      val (sautr, companyNumber, regime) = request.body
+
+      registerWithMultipleIdentifiersService.registerLimitedLiabilityPartnership(sautr, companyNumber, regime).map(handleRegisterResponse)
+    })
+
+  def registerScottishLimitedPartnership(): Action[(String, String, String)] =
+    Action.async(parse.json[(String, String, String)](json => for {
+      sautr <- (json \ "sautr").validate[String]
+      companyNumber <- (json \ "companyNumber").validate[String]
+      regime <- (json \ "regime").validate[String]
+    } yield (sautr, companyNumber, regime)
+    ))(implicit request => authorised() {
+      val (sautr, companyNumber, regime) = request.body
+
+      registerWithMultipleIdentifiersService.registerScottishLimitedPartnership(sautr, companyNumber, regime).map(handleRegisterResponse)
     })
 
   private def handleRegisterResponse(registerResult: RegisterWithMultipleIdentifiersResult): Result = registerResult match {

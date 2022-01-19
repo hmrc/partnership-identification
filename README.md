@@ -47,7 +47,8 @@ Example response body:
 ```
 {
 "sa-utr": "1234567890",
-"postcode":"AA11AA"
+"postcode":"AA11AA",
+"regime": "VATC"
 }
 ```
 
