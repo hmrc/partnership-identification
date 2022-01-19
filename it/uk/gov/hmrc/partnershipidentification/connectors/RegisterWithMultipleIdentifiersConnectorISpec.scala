@@ -39,8 +39,8 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         "the Registration was a success on the Register API" in {
           disable(StubRegisterWithIdentifiers)
 
-          stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
-          val result = connector.register(testGeneralPartnershipjsonBody)
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
+          val result = connector.register(testGeneralPartnershipjsonBody, testRegime)
           await(result) mustBe (RegisterWithMultipleIdentifiersSuccess(testSafeId))
         }
       }
@@ -50,8 +50,8 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         "the Registration was a success on the Register API stub" in {
           enable(StubRegisterWithIdentifiers)
 
-          stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
-          val result = connector.register(testGeneralPartnershipjsonBody)
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
+          val result = connector.register(testGeneralPartnershipjsonBody, testRegime)
           await(result) mustBe (RegisterWithMultipleIdentifiersSuccess(testSafeId))
         }
       }
@@ -61,8 +61,8 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         "the Registration was a failure on the Register API stub" in {
           enable(StubRegisterWithIdentifiers)
 
-          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
-          val result = connector.register(testGeneralPartnershipjsonBody)
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST)
+          val result = connector.register(testGeneralPartnershipjsonBody, testRegime)
           await(result) mustBe RegisterWithMultipleIdentifiersFailure(BAD_REQUEST, Json.obj(
             "code" -> "INVALID_PAYLOAD",
             "reason" -> "Request has not passed validation. Invalid Payload."

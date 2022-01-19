@@ -55,9 +55,14 @@ Example response body:
     }
 ```
 
-#### POST /cross-regime/register/VATC
+#### POST /cross-regime/register/GRS
 
 Stubs the call to the Register with Multiple Identifiers API to either create/match the business' identifiers with a BPR (Business partner record). The following Feature Switch will need to be enabled: `Use stub for register API`
+A valid regime must be sent as a query parameter. The accepted values are VATC or PPT. For example:
+
+```
+/test-only/cross-regime/register/GRS?grsRegime=VATC
+```
 
 ##### Request:
 

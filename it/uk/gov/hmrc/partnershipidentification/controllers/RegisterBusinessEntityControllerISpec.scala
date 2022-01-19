@@ -29,10 +29,11 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registered and the SafeId" when {
       "the Registration was a success" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
+        stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
 
         val jsonBody = Json.obj(
-          "sautr" -> testSautr
+          "sautr" -> testSautr,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -48,10 +49,11 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
+        stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
-          "sautr" -> testSautr
+          "sautr" -> testSautr,
+          "regime" -> testRegime
         )
         val resultJson = Json.obj(
           "registration" -> Json.obj(
@@ -68,10 +70,11 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registered and the SafeId" when {
       "the Registration was a success" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(testSautr)(OK, testSafeId)
+        stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
 
         val jsonBody = Json.obj(
-          "sautr" -> testSautr
+          "sautr" -> testSautr,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -87,10 +90,11 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(testSautr)(BAD_REQUEST)
+        stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
-          "sautr" -> testSautr
+          "sautr" -> testSautr,
+          "regime" -> testRegime
         )
         val resultJson = Json.obj(
           "registration" -> Json.obj(
@@ -107,11 +111,12 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registered and the SafeId" when {
       "the Registration was a success" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber)(OK, testSafeId)
+        stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber, testRegime)(OK, testSafeId)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
-          "companyNumber" -> testCompanyNumber
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -127,11 +132,12 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber)(BAD_REQUEST)
+        stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber, testRegime)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
-          "companyNumber" -> testCompanyNumber
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -149,11 +155,12 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registered and the SafeId" when {
       "the Registration was a success" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber)(OK, testSafeId)
+        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber, testRegime)(OK, testSafeId)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
-          "companyNumber" -> testCompanyNumber
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -169,11 +176,12 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber)(BAD_REQUEST)
+        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber, testRegime)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
-          "companyNumber" -> testCompanyNumber
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -191,11 +199,12 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registered and the SafeId" when {
       "the Registration was a success" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber)(OK, testSafeId)
+        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber, testRegime)(OK, testSafeId)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
-          "companyNumber" -> testCompanyNumber
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(
@@ -211,11 +220,12 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber)(BAD_REQUEST)
+        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber, testRegime)(BAD_REQUEST)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
-          "companyNumber" -> testCompanyNumber
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
         )
 
         val resultJson = Json.obj(

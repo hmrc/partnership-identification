@@ -38,73 +38,73 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
       "reason" -> "Request has not passed validation. Invalid Payload."
     )
 
-  def stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(sautr: String)(status: Int, safeId: String): StubMapping = {
+  def stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(sautr: String, regime:String)(status: Int, safeId: String): StubMapping = {
     val postBody = Json.obj("ordinaryPartnership" ->
       Json.obj("sautr" -> sautr
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseSuccessBody(safeId)
       )
   }
 
-  def stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(sautr: String)(status: Int): StubMapping = {
+  def stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(sautr: String ,regime:String)(status: Int): StubMapping = {
     val postBody = Json.obj("ordinaryPartnership" ->
       Json.obj("sautr" -> sautr
       ))
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseFailureBody()
       )
   }
-  def stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(sautr: String)(status: Int, safeId: String): StubMapping = {
+  def stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(sautr: String, regime:String)(status: Int, safeId: String): StubMapping = {
     val postBody = Json.obj("scottishPartnership" ->
       Json.obj("sautr" -> sautr
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseSuccessBody(safeId)
       )
   }
 
-  def stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(sautr: String)(status: Int): StubMapping = {
+  def stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(sautr: String, regime:String)(status: Int): StubMapping = {
     val postBody = Json.obj("scottishPartnership" ->
       Json.obj("sautr" -> sautr
       ))
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseFailureBody()
       )
   }
 
-  def stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String)(status: Int, safeId: String): StubMapping = {
+  def stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String, regime:String)(status: Int, safeId: String): StubMapping = {
     val postBody = Json.obj("limitedPartnership" ->
       Json.obj(
         "sautr" -> sautr,
         "crn" -> companyNumber
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseSuccessBody(safeId)
       )
   }
 
-  def stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String)(status: Int): StubMapping = {
+  def stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String, regime:String)(status: Int): StubMapping = {
     val postBody = Json.obj("limitedPartnership" ->
       Json.obj(
         "sautr" -> sautr,
         "crn" -> companyNumber
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseFailureBody()
@@ -112,28 +112,28 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
   }
 
 
-  def stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String)(status: Int, safeId: String): StubMapping = {
+  def stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String, regime:String)(status: Int, safeId: String): StubMapping = {
     val postBody = Json.obj("limitedLiabilityPartnership" ->
       Json.obj(
         "sautr" -> sautr,
         "crn" -> companyNumber
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseSuccessBody(safeId)
       )
   }
 
-  def stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String)(status: Int): StubMapping = {
+  def stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String, regime:String)(status: Int): StubMapping = {
     val postBody = Json.obj("limitedLiabilityPartnership" ->
       Json.obj(
         "sautr" -> sautr,
         "crn" -> companyNumber
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseFailureBody()
@@ -141,28 +141,28 @@ trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
   }
 
 
-  def stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String)(status: Int, safeId: String): StubMapping = {
+  def stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(sautr: String, companyNumber: String, regime:String)(status: Int, safeId: String): StubMapping = {
     val postBody = Json.obj("scottishLimitedPartnership" ->
       Json.obj(
         "sautr" -> sautr,
         "crn" -> companyNumber
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseSuccessBody(safeId)
       )
   }
 
-  def stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String)(status: Int): StubMapping = {
+  def stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(sautr: String, companyNumber: String, regime:String)(status: Int): StubMapping = {
     val postBody = Json.obj("scottishLimitedPartnership" ->
       Json.obj(
         "sautr" -> sautr,
         "crn" -> companyNumber
       )
     )
-    when(method = POST, uri = "/cross-regime/register/VATC", postBody)
+    when(method = POST, uri = s"/cross-regime/register/GRS\\?grsRegime=$regime", postBody)
       .thenReturn(
         status = status,
         body = registerResponseFailureBody()

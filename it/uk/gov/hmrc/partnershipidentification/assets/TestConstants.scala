@@ -24,6 +24,7 @@ object TestConstants {
 
   val testJourneyId: String = UUID.randomUUID().toString
   val testInternalId: String = UUID.randomUUID().toString
+  val testRegime = "VATC"
   val testSafeId: String = UUID.randomUUID().toString
   val testSautr: String = "1234567890"
   val testCompanyNumber: String = "12345678"

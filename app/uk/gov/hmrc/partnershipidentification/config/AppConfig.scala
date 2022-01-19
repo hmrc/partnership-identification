@@ -46,9 +46,9 @@ class AppConfig @Inject()(config: Configuration,
     val baseUrl: String = if(isEnabled(StubPartnershipKnownFacts)) desStubBaseUrl else desBaseUrl
     s"$baseUrl/income-tax-self-assessment/known-facts/utr/$sautr"
   }
-  def getRegisterWithMultipleIdentifiersUrl: String = {
+  def getRegisterWithMultipleIdentifiersUrl(regime: String): String = {
     val baseUrl = if (isEnabled(StubRegisterWithIdentifiers)) desStubBaseUrl else desBaseUrl
-    s"$baseUrl/cross-regime/register/VATC"
+    s"$baseUrl/cross-regime/register/GRS?grsRegime=$regime"
   }
 
 }

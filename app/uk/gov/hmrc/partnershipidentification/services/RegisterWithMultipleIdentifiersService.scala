@@ -28,7 +28,7 @@ import scala.concurrent.Future
 @Singleton
 class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdentifiersConnector: RegisterWithMultipleIdentifiersConnector) {
 
-  def registerGeneralPartnership(sautr: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+  def registerGeneralPartnership(sautr: String, regime: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
     val jsonBody: JsObject =
       Json.obj(
         "ordinaryPartnership" ->
@@ -36,10 +36,10 @@ class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdent
             "sautr" -> sautr
           )
       )
-    registerWithMultipleIdentifiersConnector.register(jsonBody)
+    registerWithMultipleIdentifiersConnector.register(jsonBody, regime)
   }
 
-  def registerScottishPartnership(sautr: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+  def registerScottishPartnership(sautr: String, regime: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
     val jsonBody: JsObject =
       Json.obj(
         "scottishPartnership" ->
@@ -47,10 +47,10 @@ class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdent
             "sautr" -> sautr
           )
       )
-    registerWithMultipleIdentifiersConnector.register(jsonBody)
+    registerWithMultipleIdentifiersConnector.register(jsonBody, regime)
   }
 
-  def registerLimitedPartnership(sautr: String, companyNumber: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+  def registerLimitedPartnership(sautr: String, companyNumber: String, regime: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
     val jsonBody: JsObject =
       Json.obj(
         "limitedPartnership" ->
@@ -59,10 +59,10 @@ class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdent
             "crn" -> companyNumber
           )
       )
-    registerWithMultipleIdentifiersConnector.register(jsonBody)
+    registerWithMultipleIdentifiersConnector.register(jsonBody, regime)
   }
 
-  def registerLimitedLiabilityPartnership(sautr: String, companyNumber: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+  def registerLimitedLiabilityPartnership(sautr: String, companyNumber: String, regime: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
     val jsonBody: JsObject =
       Json.obj(
         "limitedLiabilityPartnership" ->
@@ -71,10 +71,10 @@ class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdent
             "crn" -> companyNumber
           )
       )
-    registerWithMultipleIdentifiersConnector.register(jsonBody)
+    registerWithMultipleIdentifiersConnector.register(jsonBody, regime)
   }
 
-  def registerScottishLimitedPartnership(sautr: String, companyNumber: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
+  def registerScottishLimitedPartnership(sautr: String, companyNumber: String, regime: String)(implicit hc: HeaderCarrier): Future[RegisterWithMultipleIdentifiersResult] = {
     val jsonBody: JsObject =
       Json.obj(
         "scottishLimitedPartnership" ->
@@ -83,6 +83,6 @@ class RegisterWithMultipleIdentifiersService @Inject()(registerWithMultipleIdent
             "crn" -> companyNumber
           )
       )
-    registerWithMultipleIdentifiersConnector.register(jsonBody)
+    registerWithMultipleIdentifiersConnector.register(jsonBody, regime)
   }
 }
