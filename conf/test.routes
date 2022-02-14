@@ -4,4 +4,4 @@ POST       /api/feature-switches                                        uk.gov.h
 
 GET        /income-tax-self-assessment/known-facts/utr/:sautr           uk.gov.hmrc.partnershipidentification.testonly.PartnershipKnownFactsStubController.getPartnershipKnownFacts(sautr)
 
-POST       /cross-regime/register/GRS                                  uk.gov.hmrc.partnershipidentification.testonly.RegisterWithMultipleIdentifiersStubController.registerWithMultipleIdentifiers(grsRegime:String)
+POST       /cross-regime/register/GRS                                  uk.gov.hmrc.partnershipidentification.testonly.RegisterWithMultipleIdentifiersStubController.registerWithMultipleIdentifiers()
