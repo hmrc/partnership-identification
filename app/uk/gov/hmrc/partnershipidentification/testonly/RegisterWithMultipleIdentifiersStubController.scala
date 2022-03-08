@@ -35,6 +35,10 @@ class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponen
         case "1908789914" => "XX0000100382425" // PPT Testing
         case "2908789918" => "XM0000100382429" // PPT Testing
         case "4908789917" => "XL0000100382428" // PPT Testing
+        case "4111234406" => "XZ0000100382301"
+        case "1908789913" => "XH0000100382424"
+        case "8908789915" => "XJ0000100382426"
+        case "6908789916" => "XK0000100382427"
         case _ => "X00000123456789"
       }
 
