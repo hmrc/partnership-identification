@@ -23,4 +23,24 @@ lazy val microservice = Project(appName, file("."))
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
+  .settings(calculateITTestsGroupingSettings(System.getProperty("isADevMachine")): _*)
   .settings(resolvers += Resolver.jcenterRepo)
+
+def calculateITTestsGroupingSettings(isADevMachineProperty: String): Seq[sbt.Setting[_]] = {
+  IntegrationTest / testGrouping := {
+    if ("true".equals(isADevMachineProperty))
+      onlyOneJvmForAllISpecTestsTestGroup.value
+    else
+      (IntegrationTest / testGrouping).value
+  }
+}
+
+lazy val onlyOneJvmForAllISpecTestsTestGroup = taskKey[Seq[Tests.Group]]("Default test group that run all the tests in only one JVM - (much faster!)")
+
+onlyOneJvmForAllISpecTestsTestGroup := Seq(new Tests.Group(
+  "<default>",
+  (IntegrationTest / definedTests).value,
+  Tests.InProcess,
+  Seq.empty
+))
+
