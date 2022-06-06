@@ -17,11 +17,10 @@
 package uk.gov.hmrc.partnershipidentification.connectors
 
 import play.api.http.Status.{BAD_REQUEST, OK}
-import play.api.libs.json.Json
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
-import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser.{RegisterWithMultipleIdentifiersFailure, RegisterWithMultipleIdentifiersSuccess}
+import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser.{Failure, RegisterWithMultipleIdentifiersFailure, RegisterWithMultipleIdentifiersSuccess}
 import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubRegisterWithIdentifiers}
 import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
 import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
@@ -45,6 +44,38 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
         }
       }
     }
+    s"the $StubRegisterWithIdentifiers feature switch is disabled" when {
+      "return a single failure with the Json body" when {
+        "the Registration was a failure on the Register API" in {
+          disable(StubRegisterWithIdentifiers)
+
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST, testSingleErrorRegistrationFailureResponse)
+          await(connector.register(testGeneralPartnershipjsonBody, testRegime)) match {
+            case RegisterWithMultipleIdentifiersFailure(status, failures) =>
+              status mustBe BAD_REQUEST
+              failures.length mustBe 1
+              failures.head mustBe Failure(invalidPayload, requestFailedValidationPayload)
+            case _ => fail("Registration single failure result expected")
+          }
+        }
+      }
+      "return multiple failures with the Json body" when {
+        "the Registration was a failure on the Register API" in {
+          disable(StubRegisterWithIdentifiers)
+
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST, testMultipleErrorRegistrationFailureResponses)
+
+          await(connector.register(testGeneralPartnershipjsonBody, testRegime)) match {
+            case RegisterWithMultipleIdentifiersFailure(status, failures) =>
+              status mustBe BAD_REQUEST
+              failures.length mustBe 2
+              failures.head mustBe Failure(invalidRegime, requestFailedValidationRegime)
+              failures.last mustBe Failure(invalidPayload, requestFailedValidationPayload)
+            case _ => fail("Registration multiple failure result expected")
+          }
+        }
+      }
+    }
     s"the $StubRegisterWithIdentifiers feature switch is enabled" when {
       "return OK with status Registered and the SafeId" when {
         "the Registration was a success on the Register API stub" in {
@@ -57,16 +88,34 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
       }
     }
     s"the $StubRegisterWithIdentifiers feature switch is enabled" when {
-      "return a failure with the Json body" when {
+      "return a single failure with the Json body" when {
         "the Registration was a failure on the Register API stub" in {
           enable(StubRegisterWithIdentifiers)
 
-          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST)
-          val result = connector.register(testGeneralPartnershipjsonBody, testRegime)
-          await(result) mustBe RegisterWithMultipleIdentifiersFailure(BAD_REQUEST, Json.obj(
-            "code" -> "INVALID_PAYLOAD",
-            "reason" -> "Request has not passed validation. Invalid Payload."
-          ).toString())
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST, testSingleErrorRegistrationFailureResponse)
+          await(connector.register(testGeneralPartnershipjsonBody, testRegime)) match {
+            case RegisterWithMultipleIdentifiersFailure(status, failures) =>
+              status mustBe BAD_REQUEST
+              failures.length mustBe 1
+              failures.head mustBe Failure(invalidPayload, requestFailedValidationPayload)
+            case _ => fail("Registration single failure result expected")
+          }
+        }
+      }
+      "return multiple failures with the Json body" when {
+        "the Registration was a failure on the RegisterAPI stub" in {
+          enable(StubRegisterWithIdentifiers)
+
+          stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST, testMultipleErrorRegistrationFailureResponses)
+
+          await(connector.register(testGeneralPartnershipjsonBody, testRegime)) match {
+            case RegisterWithMultipleIdentifiersFailure(status, failures) =>
+              status mustBe BAD_REQUEST
+              failures.length mustBe 2
+              failures.head mustBe Failure(invalidRegime, requestFailedValidationRegime)
+              failures.last mustBe Failure(invalidPayload, requestFailedValidationPayload)
+            case _ => fail("Registration single failure result expected")
+          }
         }
       }
     }

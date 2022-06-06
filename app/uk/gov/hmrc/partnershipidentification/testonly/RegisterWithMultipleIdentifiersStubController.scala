@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.partnershipidentification.testonly
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -25,6 +25,30 @@ import scala.concurrent.Future
 
 @Singleton
 class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponents: ControllerComponents) extends BackendController(controllerComponents) {
+
+  val singleFailureResultAsString: String =
+    s"""{
+       |  "code" : "INVALID_PAYLOAD",
+       |  "reason" : "Request has not passed validation. Invalid Payload."
+       |}""".stripMargin
+
+  val multipleFailureResultAsString: String =
+    s"""
+       |{
+       |    "failures" : [
+       |      {
+       |        "code" : "INVALID_PAYLOAD",
+       |        "reason" : "Request has not passed validation. Invalid Payload."
+       |      },
+       |      {
+       |        "code" : "INVALID_REGIME",
+       |        "reason" : "Request has not passed validation. Invalid Regime."
+       |      }
+       |    ]
+       |}""".stripMargin
+
+  val singleFailureResponseAsJson: JsObject = Json.parse(singleFailureResultAsString).as[JsObject]
+  val multipleFailureResponseAsJson: JsObject = Json.parse(multipleFailureResultAsString).as[JsObject]
 
   def registerWithMultipleIdentifiers: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
@@ -42,12 +66,21 @@ class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponen
         case _ => "X00000123456789"
       }
 
-      Future.successful(Ok(Json.obj(
-        "identification" -> Json.arr(
-          Json.obj(
-            "idType" -> "SAFEID",
-            "idValue" -> stubbedSafeId
-          )
-        ))))
+       sautr match {
+         case "0000000002" => Future.successful(BadRequest(singleFailureResultAsString))
+         case "0000000003" => Future.successful(BadRequest(multipleFailureResponseAsJson))
+         case _ => Future.successful(Ok(createSuccessResponse(stubbedSafeId)))
+       }
+
   }
+
+  private def createSuccessResponse(stubbedSafeId: String): JsObject =
+    Json.obj(
+      "identification" -> Json.arr(
+        Json.obj(
+          "idType" -> "SAFEID",
+          "idValue" -> stubbedSafeId
+        )
+      )
+    )
 }
