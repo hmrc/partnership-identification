@@ -41,4 +41,28 @@ object TestConstants {
           "sautr" -> testSautr
         )
     )
+
+  val invalidPayload: String = "INVALID_PAYLOAD"
+  val invalidRegime: String = "INVALID_REGIME"
+  val requestFailedValidationPayload: String = "Request has not passed validation. Invalid Payload."
+  val requestFailedValidationRegime: String = "Request has not passed validation. Invalid Regime."
+
+  val testSingleErrorRegistrationFailureResponse: JsObject =  Json.obj(
+    "code" -> invalidPayload,
+    "reason" -> requestFailedValidationPayload
+  )
+
+  val testMultipleErrorRegistrationFailureResponses: JsObject = Json.obj(
+    "failures" -> Json.arr(
+      Json.obj(
+        "code" -> invalidRegime,
+        "reason" -> requestFailedValidationRegime
+      ),
+      Json.obj(
+        "code" -> invalidPayload,
+        "reason" -> requestFailedValidationPayload
+      )
+    )
+  )
+
 }

@@ -96,10 +96,11 @@ class RegisterBusinessEntityController @Inject()(cc: ControllerComponents,
         "registration" -> Json.obj(
           "registrationStatus" -> "REGISTERED",
           "registeredBusinessPartnerId" -> safeId)))
-    case _ =>
+    case RegisterWithMultipleIdentifiersFailure(_, body) =>
       Ok(Json.obj(
         "registration" -> Json.obj(
-          "registrationStatus" -> "REGISTRATION_FAILED"))
+          "registrationStatus" -> "REGISTRATION_FAILED",
+        "failures" -> body))
       )
   }
 }

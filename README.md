@@ -159,9 +159,8 @@ Body:
 
 ```
 {
-"ordinaryPartnership": {
-  "sautr": "1234567890"
-           }
+  "sautr": "1234567890",
+  "regime": "VATC"
 }
 ```
 
@@ -183,9 +182,15 @@ Example response bodies:
 or
 ```
 {
-"registration":{
-  "registrationStatus":"REGISTRATION_FAILED",
-               }
+  "registration":{
+    "registrationStatus":"REGISTRATION_FAILED",
+    "failures": [
+              {
+                 "code": "INVALID_REGIME",
+                 "reason": "Request has not passed validation.  Invalid regime."
+              }
+         ]
+  }
 }
 ```
 
@@ -200,9 +205,8 @@ Body:
 
 ```
 {
-"scottishPartnership": {
-  "sautr": "1234567890"
-           }
+  "sautr": "1234567890",
+  "regime": "VATC"
 }
 ```
 
@@ -224,13 +228,160 @@ Example response bodies:
 or
 ```
 {
-"registration":{
-  "registrationStatus":"REGISTRATION_FAILED",
-               }
+  "registration":{
+    "registrationStatus":"REGISTRATION_FAILED",
+    "failures": [
+            {
+               "code": "INVALID_REGIME",
+               "reason": "Request has not passed validation.  Invalid regime."
+            }
+       ]
+  }
 }
 ```
 
-#### POST /validate-partnership-information
+#### POST /register-limited-partnership
+
+___
+Submits a registration request to the downstream Register API.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+
+##### Request:
+Body:
+
+```
+{
+  "sautr": "1234567890",
+  "companyNumber": "12345678",
+  "regime": "VATC"
+}
+```
+
+##### Response:
+
+Status: **OK(200)**
+Attempted registration and returns result of call
+
+
+Example response bodies:
+```
+{
+"registration":{
+  "registrationStatus":"REGISTERED",
+  "registeredBusinessPartnerId":"<randomm UUID>"
+               }
+}
+```
+or
+```
+{
+  "registration":{
+    "registrationStatus":"REGISTRATION_FAILED",
+    "failures": [
+            {
+               "code": "INVALID_REGIME",
+               "reason": "Request has not passed validation.  Invalid regime."
+            }
+       ]
+  }
+}
+```
+
+#### POST /register-limited-liability-partnership
+
+___
+Submits a registration request to the downstream Register API.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+
+##### Request:
+Body:
+
+```
+{
+  "sautr": "1234567890",
+  "companyNumber": "12345678",
+  "regime": "VATC"
+}
+```
+
+##### Response:
+
+Status: **OK(200)**
+Attempted registration and returns result of call
+
+
+Example response bodies:
+```
+{
+"registration":{
+  "registrationStatus":"REGISTERED",
+  "registeredBusinessPartnerId":"<randomm UUID>"
+               }
+}
+```
+or
+```
+{
+  "registration":{
+    "registrationStatus":"REGISTRATION_FAILED",
+    "failures": [
+            {
+               "code": "INVALID_REGIME",
+               "reason": "Request has not passed validation.  Invalid regime."
+            }
+       ]
+  }
+}
+```
+
+#### POST /register-limited-liability-partnership
+
+___
+Submits a registration request to the downstream Register API.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+
+##### Request:
+Body:
+
+```
+{
+  "sautr": "1234567890",
+  "companyNumber": "12345678",
+  "regime": "VATC"
+}
+```
+
+##### Response:
+
+Status: **OK(200)**
+Attempted registration and returns result of call
+
+
+Example response bodies:
+```
+{
+"registration":{
+  "registrationStatus":"REGISTERED",
+  "registeredBusinessPartnerId":"<randomm UUID>"
+               }
+}
+```
+or
+```
+{
+  "registration":{
+    "registrationStatus":"REGISTRATION_FAILED",
+    "failures": [
+            {
+               "code": "INVALID_REGIME",
+               "reason": "Request has not passed validation.  Invalid regime."
+            }
+       ]
+  }
+}
+```
+
+#### POST /register-scottish-limited-partnership
 
 ---
 Checks if the user entered identifiers match what is held in the database.

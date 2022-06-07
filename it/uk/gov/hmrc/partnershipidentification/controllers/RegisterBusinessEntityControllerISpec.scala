@@ -17,13 +17,58 @@
 package uk.gov.hmrc.partnershipidentification.controllers
 
 import play.api.http.Status.{BAD_REQUEST, OK}
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, JsObject}
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
 import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
 import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
 
 class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with AuthStub with RegisterWithMultipleIdentifiersStub {
+
+  val successfulResultAsString: String =
+    s"""
+       |{
+       |  "registration" : {
+       |    "registrationStatus" : "REGISTERED",
+       |    "registeredBusinessPartnerId" : "$testSafeId"
+       |  }
+       |}""".stripMargin
+
+  val singleFailureResultAsString: String =
+    s"""
+       |{
+       |  "registration" : {
+       |    "registrationStatus" : "REGISTRATION_FAILED",
+       |    "failures" : [
+       |      {
+       |        "code" : "$invalidPayload",
+       |        "reason" : "$requestFailedValidationPayload"
+       |      }
+       |    ]
+       |  }
+       |}""".stripMargin
+
+  val multipleFailureResultAsString: String =
+    s"""
+       |{
+       |  "registration" : {
+       |    "registrationStatus" : "REGISTRATION_FAILED",
+       |    "failures" : [
+       |      {
+       |        "code" : "$invalidRegime",
+       |        "reason" : "$requestFailedValidationRegime"
+       |      },
+       |      {
+       |        "code" : "$invalidPayload",
+       |        "reason" : "$requestFailedValidationPayload"
+       |      }
+       |    ]
+       |  }
+       |}""".stripMargin
+
+  val successfulRegistrationAsJson: JsObject = Json.parse(successfulResultAsString).as[JsObject]
+  val singleFailureResultAsJson: JsObject = Json.parse(singleFailureResultAsString).as[JsObject]
+  val multipleFailureResultAsJson: JsObject = Json.parse(multipleFailureResultAsString).as[JsObject]
 
   "POST /register-general-partnership" should {
     "return OK with status Registered and the SafeId" when {
@@ -36,32 +81,24 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTERED",
-            "registeredBusinessPartnerId" -> testSafeId))
-
         val result = post("/register-general-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
+        result.json mustBe successfulRegistrationAsJson
       }
     }
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST)
+        stubRegisterGeneralPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST, testSingleErrorRegistrationFailureResponse)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
           "regime" -> testRegime
         )
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTRATION_FAILED"))
 
         val result = post("/register-general-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
+        result.json mustBe singleFailureResultAsJson
 
       }
     }
@@ -77,33 +114,24 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTERED",
-            "registeredBusinessPartnerId" -> testSafeId))
-
         val result = post("/register-scottish-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
+        result.json mustBe successfulRegistrationAsJson
       }
     }
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST)
+        stubRegisterScottishPartnershipWithMultipleIdentifiersFailure(testSautr, testRegime)(BAD_REQUEST, testMultipleErrorRegistrationFailureResponses)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
           "regime" -> testRegime
         )
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTRATION_FAILED"))
 
         val result = post("/register-scottish-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
-
+        result.json mustBe multipleFailureResultAsJson
       }
     }
   }
@@ -119,20 +147,16 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTERED",
-            "registeredBusinessPartnerId" -> testSafeId))
-
         val result = post("/register-limited-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
+        result.json mustBe successfulRegistrationAsJson
       }
     }
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber, testRegime)(BAD_REQUEST)
+        stubRegisterLimitedPartnershipWithMultipleIdentifiersFailure(
+          testSautr, testCompanyNumber, testRegime)(BAD_REQUEST, testSingleErrorRegistrationFailureResponse)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
@@ -140,14 +164,9 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTRATION_FAILED"))
-
         val result = post("/register-limited-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
-
+        result.json mustBe singleFailureResultAsJson
       }
     }
   }
@@ -163,20 +182,16 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTERED",
-            "registeredBusinessPartnerId" -> testSafeId))
-
         val result = post("/register-limited-liability-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
+        result.json mustBe successfulRegistrationAsJson
       }
     }
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber, testRegime)(BAD_REQUEST)
+        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersFailure(
+          testSautr, testCompanyNumber, testRegime)(BAD_REQUEST, testSingleErrorRegistrationFailureResponse)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
@@ -184,14 +199,9 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTRATION_FAILED"))
-
         val result = post("/register-limited-liability-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
-
+        result.json mustBe singleFailureResultAsJson
       }
     }
   }
@@ -207,20 +217,16 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTERED",
-            "registeredBusinessPartnerId" -> testSafeId))
-
         val result = post("/register-scottish-limited-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
+        result.json mustBe successfulRegistrationAsJson
       }
     }
     "return OK with status Registration_Failed" when {
       "the Registration was not successful" in {
         stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
-        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(testSautr, testCompanyNumber, testRegime)(BAD_REQUEST)
+        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersFailure(
+          testSautr, testCompanyNumber, testRegime)(BAD_REQUEST, testMultipleErrorRegistrationFailureResponses)
 
         val jsonBody = Json.obj(
           "sautr" -> testSautr,
@@ -228,14 +234,9 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
           "regime" -> testRegime
         )
 
-        val resultJson = Json.obj(
-          "registration" -> Json.obj(
-            "registrationStatus" -> "REGISTRATION_FAILED"))
-
         val result = post("/register-scottish-limited-partnership")(jsonBody)
         result.status mustBe OK
-        result.json mustBe resultJson
-
+        result.json mustBe multipleFailureResultAsJson
       }
     }
   }
