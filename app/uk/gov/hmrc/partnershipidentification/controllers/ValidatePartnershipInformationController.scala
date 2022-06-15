@@ -18,6 +18,7 @@ package uk.gov.hmrc.partnershipidentification.controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.partnershipidentification.models.PartnershipInformation
 import uk.gov.hmrc.partnershipidentification.services.ValidatePartnershipInformationService
 import uk.gov.hmrc.partnershipidentification.services.ValidatePartnershipInformationService.PostCodeMatched
@@ -28,21 +29,22 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class ValidatePartnershipInformationController @Inject()(validatePartnershipInformationService: ValidatePartnershipInformationService,
-                                                        cc: ControllerComponents
-                                                        )(implicit ec: ExecutionContext) extends BackendController(cc) {
+                                                         cc: ControllerComponents,
+                                                         val authConnector: AuthConnector
+                                                        )(implicit ec: ExecutionContext) extends BackendController(cc) with AuthorisedFunctions {
 
   def validate(): Action[PartnershipInformation] = Action.async(parse.json[PartnershipInformation]) {
     implicit request =>
-      val identifiersMatchKey = "identifiersMatch"
+      authorised() {
+        val identifiersMatchKey = "identifiersMatch"
 
-      validatePartnershipInformationService.validate(request.body.sautr, request.body.postcode).map {
-        case Right(PostCodeMatched) =>
-          Ok(Json.obj(identifiersMatchKey -> true))
-        case _ =>
-          Ok(Json.obj(identifiersMatchKey -> false))
+        validatePartnershipInformationService.validate(request.body.sautr, request.body.postcode).map {
+          case Right(PostCodeMatched) =>
+            Ok(Json.obj(identifiersMatchKey -> true))
+          case _ =>
+            Ok(Json.obj(identifiersMatchKey -> false))
+        }
       }
-
-
   }
 
 }
