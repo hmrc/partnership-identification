@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.partnershipidentification.controllers
 
-import play.api.http.Status.{BAD_REQUEST, OK}
-import play.api.libs.json.{Json, JsObject}
+import play.api.http.Status.{BAD_REQUEST, OK, UNAUTHORIZED}
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
 import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
 import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
@@ -102,6 +102,21 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
 
       }
     }
+    "return Unauthorised" when {
+      "there is an auth failure" in {
+        stubAuthFailure()
+        stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "regime" -> testRegime
+        )
+
+        val result = post("/register-general-partnership")(jsonBody)
+
+        result.status mustBe UNAUTHORIZED
+      }
+    }
   }
   "POST /register-scottish-partnership" should {
     "return OK with status Registered and the SafeId" when {
@@ -132,6 +147,21 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         val result = post("/register-scottish-partnership")(jsonBody)
         result.status mustBe OK
         result.json mustBe multipleFailureResultAsJson
+      }
+    }
+    "return Unauthorised" when {
+      "there is an auth failure" in {
+        stubAuthFailure()
+        stubRegisterScottishPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "regime" -> testRegime
+        )
+
+        val result = post("/register-scottish-partnership")(jsonBody)
+
+        result.status mustBe UNAUTHORIZED
       }
     }
   }
@@ -169,6 +199,22 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         result.json mustBe singleFailureResultAsJson
       }
     }
+    "return Unauthorised" when {
+      "there is an auth failure" in {
+        stubAuthFailure()
+        stubRegisterLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber, testRegime)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
+        )
+
+        val result = post("/register-limited-partnership")(jsonBody)
+
+        result.status mustBe UNAUTHORIZED
+      }
+    }
   }
   "POST /register-limited-liability-partnership" should {
     "return OK with status Registered and the SafeId" when {
@@ -204,6 +250,22 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         result.json mustBe singleFailureResultAsJson
       }
     }
+    "return Unauthorised" when {
+      "there is an auth failure" in {
+        stubAuthFailure()
+        stubRegisterLimitedLiabilityPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber, testRegime)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
+        )
+
+        val result = post("/register-limited-liability-partnership")(jsonBody)
+
+        result.status mustBe UNAUTHORIZED
+      }
+    }
   }
   "POST /register-scottish-limited-partnership" should {
     "return OK with status Registered and the SafeId" when {
@@ -237,6 +299,22 @@ class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with Aut
         val result = post("/register-scottish-limited-partnership")(jsonBody)
         result.status mustBe OK
         result.json mustBe multipleFailureResultAsJson
+      }
+    }
+    "return Unauthorised" when {
+      "there is an auth failure" in {
+        stubAuthFailure()
+        stubRegisterScottishLimitedPartnershipWithMultipleIdentifiersSuccess(testSautr, testCompanyNumber, testRegime)(OK, testSafeId)
+
+        val jsonBody = Json.obj(
+          "sautr" -> testSautr,
+          "companyNumber" -> testCompanyNumber,
+          "regime" -> testRegime
+        )
+
+        val result = post("/register-scottish-limited-partnership")(jsonBody)
+
+        result.status mustBe UNAUTHORIZED
       }
     }
   }

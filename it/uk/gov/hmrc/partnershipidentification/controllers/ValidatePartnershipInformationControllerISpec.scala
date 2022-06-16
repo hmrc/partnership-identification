@@ -16,19 +16,21 @@
 
 package uk.gov.hmrc.partnershipidentification.controllers
 
+import play.api.http.Status.UNAUTHORIZED
 import play.api.libs.json.{JsObject, Json}
-import play.api.test.Helpers.{OK, NOT_FOUND, INTERNAL_SERVER_ERROR}
+import play.api.test.Helpers.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
-import uk.gov.hmrc.partnershipidentification.stubs.PartnershipKnownFactsStub
+import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, PartnershipKnownFactsStub}
 import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
-class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper with PartnershipKnownFactsStub {
+class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper with PartnershipKnownFactsStub with AuthStub {
 
   val testJson: JsObject = Json.obj("sautr" -> testSautr, "postcode" -> testPostcode)
 
   "POST /validate-partnership-information" should {
     "return 'identifiersMatch: true" when {
       "the data provided matches what is held downstream" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
         stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
 
         val result = post("/validate-partnership-information")(testJson)
@@ -40,6 +42,7 @@ class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper 
 
     "return 'identifiersMatch: false" when {
       "the data provided does not match what is held downstream" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
         val testJson: JsObject = Json.obj("sautr" -> testSautr, "postcode" -> "AB1 1AB")
         stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
 
@@ -50,6 +53,7 @@ class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper 
       }
 
       "the downstream endpoint successfully returns no postcodes" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
         stubGetPartnershipKnownFacts(testSautr)(OK, None)
 
         val result = post("/validate-partnership-information")(testJson)
@@ -59,6 +63,7 @@ class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper 
       }
 
       "the data was not found" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
         stubGetPartnershipKnownFacts(testSautr)(NOT_FOUND, None)
 
         val result = post("/validate-partnership-information")(testJson)
@@ -66,10 +71,23 @@ class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper 
         result.status mustBe OK
         result.json mustBe Json.obj("identifiersMatch" -> false)
       }
+
+      "return Unauthorised" when {
+        "there is an auth failure" in {
+          stubAuthFailure()
+          stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
+
+          val result = post("/validate-partnership-information")(testJson)
+
+          result.status mustBe UNAUTHORIZED
+
+        }
+      }
     }
 
     "throw an exception" when {
       "the downstream endpoint returns an unexpected response" in {
+        stubAuth(OK, successfulAuthResponse(Some(testInternalId)))
         stubGetPartnershipKnownFacts(testSautr)(INTERNAL_SERVER_ERROR, None)
 
         val result = post("/validate-partnership-information")(testJson)
