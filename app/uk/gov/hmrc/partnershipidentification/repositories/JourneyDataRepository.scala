@@ -88,7 +88,7 @@ object JourneyDataRepository {
   def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
     keys = ascending(CreationTimestampKey),
     indexOptions = IndexOptions()
-      .name("PartnershipIdentificationExpires")
+      .name("PartnershipInformationExpires")
       .expireAfter(timeToLiveDuration, TimeUnit.SECONDS)
   )
 }
