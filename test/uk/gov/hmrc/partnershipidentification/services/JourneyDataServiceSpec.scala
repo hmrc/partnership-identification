@@ -21,7 +21,6 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsString, Json}
 import play.api.test.Helpers._
-import reactivemongo.api.commands.UpdateWriteResult
 import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -90,15 +89,45 @@ class JourneyDataServiceSpec extends AnyWordSpec with Matchers with IdiomaticMoc
   }
 
   "updateJourneyData" should {
-    "call to update the stored data" in {
-      val testKey = "testKey"
-      val testValue = JsString("testValue")
 
-      val writeResult = mock[UpdateWriteResult]
+    val testKey = "testKey"
+    val testValue = JsString("testValue")
 
-      mockJourneyDataRepository.updateJourneyData(testJourneyId, testKey, testValue, testInternalId) returns Future.successful(writeResult)
+    "return true when the data field is successfully updated" in {
 
-      await(TestJourneyDataService.updateJourneyData(testJourneyId, testKey, testValue, testInternalId)) mustBe writeResult
+      mockJourneyDataRepository.updateJourneyData(testJourneyId, testKey, testValue, testInternalId) returns Future.successful(true)
+
+      await(TestJourneyDataService.updateJourneyData(testJourneyId, testKey, testValue, testInternalId)) mustBe true
+
+    }
+
+    "return false when an update fails" in {
+
+      mockJourneyDataRepository.updateJourneyData(testJourneyId, testKey, testValue, testInternalId) returns Future.successful(false)
+
+      await(TestJourneyDataService.updateJourneyData(testJourneyId, testKey, testValue, testInternalId)) mustBe false
+
+    }
+  }
+
+  "removeJourneyDataField" should {
+
+    val testKey = "testKey"
+
+    "return true when a data field is successfully removed" in {
+
+      mockJourneyDataRepository.removeJourneyDataField(testJourneyId, testInternalId, testKey) returns Future.successful(true)
+
+      await(TestJourneyDataService.removeJourneyDataField(testJourneyId, testInternalId, testKey)) mustBe true
+
+    }
+
+    "return false when a data field is not successfully removed" in {
+
+      mockJourneyDataRepository.removeJourneyDataField(testJourneyId, testInternalId, testKey) returns Future.successful(false)
+
+      await(TestJourneyDataService.removeJourneyDataField(testJourneyId, testInternalId, testKey)) mustBe false
+
     }
   }
 }

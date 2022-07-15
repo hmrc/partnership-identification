@@ -83,7 +83,11 @@ class JourneyDataController @Inject()(cc: ControllerComponents,
       authorised().retrieve(internalId) {
         case Some(internalId) =>
           journeyDataService.updateJourneyData(journeyId, dataKey, req.body, internalId).map {
-            _ => Ok
+                hasUpdated =>
+                  if(hasUpdated)
+                    Ok
+                  else
+                    throw new InternalServerException(s"The field $dataKey could not be updated for journey $journeyId")
           }
         case None =>
           throw new InternalServerException("Internal ID could not be retrieved from Auth")
@@ -95,7 +99,11 @@ class JourneyDataController @Inject()(cc: ControllerComponents,
       authorised().retrieve(internalId) {
         case Some(internalId) =>
           journeyDataService.removeJourneyDataField(journeyId, internalId, dataKey).map {
-            _ => NoContent
+                journeyDataMatched =>
+                  if(journeyDataMatched)
+                    NoContent
+                  else
+                    throw new InternalServerException(s"The journey data for $journeyId could not be found")
           }
         case None =>
           throw new InternalServerException("Internal ID could not be retrieved from Auth")
