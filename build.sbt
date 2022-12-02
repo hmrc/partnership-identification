@@ -1,9 +1,31 @@
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
+import scoverage.ScoverageKeys
 
 val appName = "partnership-identification"
 
 val silencerVersion = "1.7.3"
+
+lazy val scoverageSettings = {
+
+  val exclusionList: List[String] = List(
+    "<empty>",
+    ".*Routes.*",
+    ".*Reverse.*",
+    "app.*",
+    "prod.*",
+    "com.kenshoo.play.metrics.*",
+    "uk.gov.hmrc.partnershipidentification.featureswitch.api.*",
+    "uk.gov.hmrc.partnershipidentification.testonly"
+  )
+
+  Seq(
+    ScoverageKeys.coverageExcludedPackages := exclusionList.mkString(";"),
+    ScoverageKeys.coverageMinimum := 90,
+    ScoverageKeys.coverageFailOnMinimum := false,
+    ScoverageKeys.coverageHighlighting := true
+  )
+}
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
@@ -20,6 +42,7 @@ lazy val microservice = Project(appName, file("."))
     )
     // ***************
   )
+  .settings(scoverageSettings)
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)

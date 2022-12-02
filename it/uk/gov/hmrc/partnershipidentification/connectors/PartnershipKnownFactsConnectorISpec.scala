@@ -19,11 +19,12 @@ package uk.gov.hmrc.partnershipidentification.connectors
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
 import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
+import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubPartnershipKnownFacts}
 import uk.gov.hmrc.partnershipidentification.models.PartnershipKnownFacts
 import uk.gov.hmrc.partnershipidentification.stubs.PartnershipKnownFactsStub
 import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
-class PartnershipKnownFactsConnectorISpec extends ComponentSpecHelper with PartnershipKnownFactsStub {
+class PartnershipKnownFactsConnectorISpec extends ComponentSpecHelper with PartnershipKnownFactsStub with FeatureSwitching{
 
   private lazy val knownFactsConnector: PartnershipKnownFactsConnector =
     app.injector.instanceOf[PartnershipKnownFactsConnector]
@@ -32,49 +33,109 @@ class PartnershipKnownFactsConnectorISpec extends ComponentSpecHelper with Partn
   private implicit val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   "getPartnershipKnownFacts" when {
-    "DES returns a successful response" should {
-      "return PartnershipKnownFacts" in {
-        stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
+    s"the $StubPartnershipKnownFacts feature switch is disabled" when {
+      "DES returns a successful response" should {
+        "return PartnershipKnownFacts" in {
+          disable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
 
-        val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
+          val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
 
-        result mustBe PartnershipKnownFacts(
-          postCode = Some(testPostcode),
-          correspondencePostCode = Some(testCorrespondencePostCode),
-          basePostCode = Some(testBasePostCode),
-          commsPostCode = Some(testCommsPostCode),
-          traderPostCode = Some(testTraderPostCode)
-        )
+          result mustBe PartnershipKnownFacts(
+            postCode = Some(testPostcode),
+            correspondencePostCode = Some(testCorrespondencePostCode),
+            basePostCode = Some(testBasePostCode),
+            commsPostCode = Some(testCommsPostCode),
+            traderPostCode = Some(testTraderPostCode)
+          )
+        }
       }
     }
+    s"the $StubPartnershipKnownFacts feature switch is disabled" when {
+      "DES returns a successful response with no postcodes" should {
+        "return PartnershipKnownFacts with no postcodes" in {
+          disable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(OK, None)
 
-    "DES returns a successful response with no postcodes" should {
-      "return PartnershipKnownFacts with no postcodes" in {
-        stubGetPartnershipKnownFacts(testSautr)(OK, None)
+          val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
 
-        val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
-
-        result mustBe PartnershipKnownFacts(None, None, None, None, None)
+          result mustBe PartnershipKnownFacts(None, None, None, None, None)
+        }
       }
     }
+    s"the $StubPartnershipKnownFacts feature switch is disabled" when {
+      "DES returns Not Found" should {
+        "return PartnershipKnownFacts with no postcodes" in {
+          enable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(NOT_FOUND, None)
 
-    "DES returns Not Found" should {
-      "return PartnershipKnownFacts with no postcodes" in {
-        stubGetPartnershipKnownFacts(testSautr)(NOT_FOUND, None)
+          val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
 
-        val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
-
-        result mustBe PartnershipKnownFacts(None, None, None, None, None)
+          result mustBe PartnershipKnownFacts(None, None, None, None, None)
+        }
       }
     }
+    s"the $StubPartnershipKnownFacts feature switch is disabled" when {
+      "DES returns an unexpected response" should {
+        "throw an exception" in {
+          disable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(INTERNAL_SERVER_ERROR, None)
 
-    "DES returns an unexpected response" should {
-      "throw an exception" in {
-        stubGetPartnershipKnownFacts(testSautr)(INTERNAL_SERVER_ERROR, None)
-
-        intercept[InternalServerException](await(knownFactsConnector.getPartnershipKnownFacts(testSautr)))
+          intercept[InternalServerException](await(knownFactsConnector.getPartnershipKnownFacts(testSautr)))
+        }
       }
     }
+    s"the $StubPartnershipKnownFacts feature switch is enabled" when {
+      "DES returns a successful response" should {
+        "return PartnershipKnownFacts" in {
+          enable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(OK, Some(fullPartnershipKnownFactsBody))
 
+          val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
+
+          result mustBe PartnershipKnownFacts(
+            postCode = Some(testPostcode),
+            correspondencePostCode = Some(testCorrespondencePostCode),
+            basePostCode = Some(testBasePostCode),
+            commsPostCode = Some(testCommsPostCode),
+            traderPostCode = Some(testTraderPostCode)
+          )
+        }
+      }
+    }
+    s"the $StubPartnershipKnownFacts feature switch is enabled" when {
+      "DES returns a successful response with no postcodes" should {
+        "return PartnershipKnownFacts with no postcodes" in {
+          enable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(OK, None)
+
+          val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
+
+          result mustBe PartnershipKnownFacts(None, None, None, None, None)
+        }
+      }
+    }
+    s"the $StubPartnershipKnownFacts feature switch is enabled" when {
+      "DES returns Not Found" should {
+        "return PartnershipKnownFacts with no postcodes" in {
+          enable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(NOT_FOUND, None)
+
+          val result = await(knownFactsConnector.getPartnershipKnownFacts(testSautr))
+
+          result mustBe PartnershipKnownFacts(None, None, None, None, None)
+        }
+      }
+    }
+    s"the $StubPartnershipKnownFacts feature switch is enabled" when {
+      "DES returns an unexpected response" should {
+        "throw an exception" in {
+          enable(StubPartnershipKnownFacts)
+          stubGetPartnershipKnownFacts(testSautr)(INTERNAL_SERVER_ERROR, None)
+
+          intercept[InternalServerException](await(knownFactsConnector.getPartnershipKnownFacts(testSautr)))
+        }
+      }
+    }
   }
 }
