@@ -1,4 +1,4 @@
-# Partnership Identification Frontend Test End-Points
+# Partnership Identification Test End-Points
 
 #### GET /income-tax-self-assessment/known-facts/utr/:sautr
 
@@ -8,12 +8,11 @@ Stubs the call to DES to retrieve the Partnership Known Facts. The following Fea
 ##### Request:
 A valid sautr must be sent in the URI:
 
-SAUTR                | Expected Response                       | Reason
----------------------|-----------------------------------------|------------------------------
-"0000000000"         | ```NOT_FOUND(404)```                    | ```UTR Failed```
-"0000000001"         | ```OK(200)```                           |  ```Successful Response, no data```
-Any Other Valid SAUTR| ```OK(200)```                           |  ```Successful Response```
-
+| SAUTR                 | Expected Response                       | Reason                             |
+|-----------------------|-----------------------------------------|------------------------------------|
+| "0000000000"          | ```NOT_FOUND(404)```                    | ```UTR Failed```                   |
+| "0000000001"          | ```OK(200)```                           | ```Successful Response, no data``` |
+ | Any Other Valid SAUTR | ```OK(200)```                           | ```Successful Response```          |
 
 Example response body:
 
@@ -58,7 +57,7 @@ Example response body:
 #### POST /cross-regime/register/GRS
 
 Stubs the call to the Register with Multiple Identifiers API to either create/match the business' identifiers with a BPR (Business partner record). The following Feature Switch will need to be enabled: `Use stub for register API`
-A valid regime must be sent as a query parameter. The accepted values are VATC or PPT. For example:
+A valid regime must be sent as a query parameter. The current accepted values are VATC or PPT. For example:
 
 ```
 /test-only/cross-regime/register/GRS?grsRegime=VATC
@@ -66,9 +65,19 @@ A valid regime must be sent as a query parameter. The accepted values are VATC o
 
 ##### Request:
 
-No body is required for this request as this always returns a successful response regardless of the data sent.
+No body is required for this request.
 
 ##### Response:
+
+Based on the sautr entered.
+
+| SAUTR Entered               | Response                                |
+|-----------------------------|-----------------------------------------|
+| ```0000000002```            | ```BAD_REQUEST with single error```     |
+| ```0000000003```            | ```BAD_REQUEST with multiple errors```  |
+| ```Any other valid sautr``` | ```OK```                                |
+
+
 Status: **OK(200)**
 
 Example Response body: 
@@ -79,5 +88,16 @@ Example Response body:
                   "idType":"SAFEID",
                   "idValue":"X00000123456789"
                  }
+}
+```
+
+Status: **BAD_REQUEST(400)**
+
+Example Response body:
+
+```
+{
+ "code" : "INVALID_PAYLOAD",
+ "reason" : "Request has not passed validation. Invalid Payload."
 }
 ```

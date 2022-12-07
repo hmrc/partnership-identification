@@ -30,7 +30,7 @@ sbt -DisADevMachine=true
 ```
 
 ### Testing Endpoints
-See the TestREADME for more information on how to use our stubs for testing
+See the [TestREADME](TestREADME.md) for more information on how to use our stubs for testing
 
 ### End-Points
 #### POST /journey
@@ -60,10 +60,10 @@ A valid journeyId must be sent in the URI
 
 ##### Response
 
-| Expected Status                         | Reason
-|-----------------------------------------|------------------------------
-| ```OK(200)```                           |  ```JourneyId exists```
-| ```NOT_FOUND(404)```                    | ```JourneyId does not exist```
+| Expected Status                         | Reason                           |
+|-----------------------------------------|----------------------------------|
+| ```OK(200)```                           | ```JourneyId exists```           |
+| ```NOT_FOUND(404)```                    | ```JourneyId does not exist```   |
 
 Example response body:
 ```
@@ -89,11 +89,11 @@ Example Request URI
 
 ##### Response:
 
-| Expected Status                         | Reason
-|-----------------------------------------|------------------------------
-| ```OK(200)```                           |  ```JourneyId exists```
-| ```NOT_FOUND(404)```                    | ```No data exists for JourneyId or dataKey```
-| ```FORBIDDEN(403)```                    | ```Auth Internal IDs do not match```
+| Expected Status                         | Reason                                        |
+|-----------------------------------------|-----------------------------------------------|
+| ```OK(200)```                           | ```JourneyId exists```                        |
+| ```NOT_FOUND(404)```                    | ```No data exists for JourneyId or dataKey``` |
+| ```FORBIDDEN(403)```                    | ```Auth Internal IDs do not match```          |
 
 
 Response body for example URI:
@@ -121,10 +121,10 @@ Example request body:
 ```
 ##### Response:
 
-| Expected Status                         | Reason
-|-----------------------------------------|------------------------------
-| ```OK(200)```                           |  ```OK```
-| ```FORBIDDEN(403)```                    | ```Auth Internal IDs do not match```
+| Expected Status                         | Reason                                 |
+|-----------------------------------------|----------------------------------------|
+| ```OK(200)```                           | ```OK```                               |
+| ```FORBIDDEN(403)```                    | ```Auth Internal IDs do not match```   |
 
 #### DELETE /journey/:journeyId/:dataKey
 
@@ -142,17 +142,16 @@ Example request URI:
 
 ##### Response:
 
-| Expected Status                         | Reason
-|-----------------------------------------|------------------------------
-| ```NO_CONTENT(204)```                   |  ```Field successfully deleted from database```
-| ```INTERNAL_SERVER_ERROR(500)```        | ```Internal ID could not be retrieved from Auth```
-
+| Expected Status                         | Reason                                               |
+|-----------------------------------------|------------------------------------------------------|
+| ```NO_CONTENT(204)```                   | ```Field successfully deleted from database```       |
+| ```INTERNAL_SERVER_ERROR(500)```        | ```Internal ID could not be retrieved from Auth```   |
 
 #### POST /register-general-partnership 
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -198,7 +197,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -244,7 +243,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -291,7 +290,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -338,7 +337,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described below.
+This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -392,25 +391,40 @@ Example Body:
 
 ```
 {
-"sautr": 1234567890,
-"postcode" -> "AB1 1AB"
+  "sautr": "1234567890",
+  "companyNumber": "12345678",
+  "regime": "VATC"
 }
 ```
 
 ##### Response:
 
-| Expected Status                         | Reason  
-|-----------------------------------------|------------------------------
-| ```OK(200)```                           |  ```Check made and returned a result```       
+Status: **OK(200)**
+Attempted registration and returns result of call
 
 
 Example response bodies:
 ```
-{"identifiersMatch":true}
+{
+"registration":{
+  "registrationStatus":"REGISTERED",
+  "registeredBusinessPartnerId":"<randomm UUID>"
+               }
+}
 ```
 or
 ```
-{"identifiersMatch":false}
+{
+  "registration":{
+    "registrationStatus":"REGISTRATION_FAILED",
+    "failures": [
+            {
+               "code": "INVALID_REGIME",
+               "reason": "Request has not passed validation.  Invalid regime."
+            }
+       ]
+  }
+}
 ```
 
 ### License
