@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.controllers
+package partnershipidentification.controllers
 
 import play.api.http.Status.{BAD_REQUEST, OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
-import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
-import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
+import partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
+import partnershipidentification.utils.ComponentSpecHelper
+import partnershipidentification.assets.TestConstants._
 
 
 class RegisterBusinessEntityControllerISpec extends ComponentSpecHelper with AuthStub with RegisterWithMultipleIdentifiersStub {

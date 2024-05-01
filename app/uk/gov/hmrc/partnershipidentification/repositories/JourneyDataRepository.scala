@@ -58,7 +58,7 @@ class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
       filterJourneyConfig(journeyId, authInternalId),
       Updates.set(dataKey, Codecs.toBson(data)),
       UpdateOptions().upsert(false)
-    ).toFuture.map {
+    ).toFuture().map{
       _.getMatchedCount == 1
     }
 
@@ -66,11 +66,11 @@ class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
     collection.updateOne(
       filterJourneyConfig(journeyId, authInternalId),
       Updates.unset(dataKey)
-    ).toFuture.map {
+    ).toFuture().map{
       _.getMatchedCount == 1
     }
 
-  def drop: Future[Unit] = collection.drop().toFuture.map(_ => Unit)
+  def drop: Future[Unit] = collection.drop().toFuture().map(_ => ())
 
   private def filterJourneyConfig(journeyId: String, authInternalId: String): Bson =
     Filters.and(
@@ -81,11 +81,11 @@ class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
 }
 
 object JourneyDataRepository {
-  val JourneyIdKey: String = "_id"
-  val AuthInternalIdKey: String = "authInternalId"
-  val CreationTimestampKey: String = "creationTimestamp"
+  private val JourneyIdKey: String = "_id"
+  private val AuthInternalIdKey: String = "authInternalId"
+  private val CreationTimestampKey: String = "creationTimestamp"
 
-  def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
+  private def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
     keys = ascending(CreationTimestampKey),
     indexOptions = IndexOptions()
       .name("PartnershipInformationExpires")

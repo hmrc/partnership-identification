@@ -18,7 +18,7 @@ package uk.gov.hmrc.partnershipidentification.connectors
 
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.connectors.PartnershipKnownFactsConnector._
+import uk.gov.hmrc.partnershipidentification.connectors.PartnershipKnownFactsConnector.{PartnershipReturnType, ReturnTypeKey}
 import uk.gov.hmrc.partnershipidentification.httpparsers.GetPartnershipKnownFactsHttpParser._
 import uk.gov.hmrc.partnershipidentification.models.PartnershipKnownFacts
 

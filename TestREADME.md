@@ -65,7 +65,7 @@ A valid regime must be sent as a query parameter. The current accepted values ar
 
 ##### Request:
 
-No body is required for this request.
+Nobody is required for this request.
 
 ##### Response:
 

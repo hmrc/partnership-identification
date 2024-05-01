@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.stubs
+package partnershipidentification.stubs
 
 import uk.gov.hmrc.partnershipidentification.services.JourneyIdGenerationService
 

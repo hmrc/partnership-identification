@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.connectors
+package partnershipidentification.connectors
 
 import play.api.test.Helpers._
+import partnershipidentification.stubs.PartnershipKnownFactsStub
+import partnershipidentification.utils.ComponentSpecHelper
 import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
+import partnershipidentification.assets.TestConstants._
+import uk.gov.hmrc.partnershipidentification.connectors.PartnershipKnownFactsConnector
 import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubPartnershipKnownFacts}
 import uk.gov.hmrc.partnershipidentification.models.PartnershipKnownFacts
-import uk.gov.hmrc.partnershipidentification.stubs.PartnershipKnownFactsStub
-import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
 class PartnershipKnownFactsConnectorISpec extends ComponentSpecHelper with PartnershipKnownFactsStub with FeatureSwitching{
 

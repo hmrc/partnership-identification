@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.stubs
+package partnershipidentification.stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.partnershipidentification.utils.WiremockMethods
+import partnershipidentification.utils.WiremockMethods
 
 trait RegisterWithMultipleIdentifiersStub extends WiremockMethods {
 

@@ -26,16 +26,11 @@ import javax.inject.{Inject, Singleton}
 class AppConfig @Inject()(config: Configuration,
                           servicesConfig: ServicesConfig) extends FeatureSwitching {
 
-  val authBaseUrl: String = servicesConfig.baseUrl("auth")
-
-  val auditingEnabled: Boolean = config.get[Boolean]("auditing.enabled")
-  val graphiteHost: String = config.get[String]("microservice.metrics.graphite.host")
-
   lazy val timeToLiveSeconds: Long = servicesConfig.getString("mongodb.timeToLiveSeconds").toLong
 
-  lazy val desBaseUrl: String = servicesConfig.getString("microservice.services.des.url")
+  private lazy val desBaseUrl: String = servicesConfig.getString("microservice.services.des.url")
 
-  lazy val desStubBaseUrl: String = servicesConfig.getString("microservice.services.des.stub-url")
+  private lazy val desStubBaseUrl: String = servicesConfig.getString("microservice.services.des.stub-url")
 
   lazy val desEnvironmentHeader: (String, String) =
     "Environment" -> servicesConfig.getString("microservice.services.des.environment")

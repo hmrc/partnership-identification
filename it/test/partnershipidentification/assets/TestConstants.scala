@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.assets
+package partnershipidentification.assets
 
 import play.api.libs.json.{JsObject, Json}
 

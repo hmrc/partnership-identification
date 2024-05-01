@@ -2,10 +2,10 @@
 # Partnership Identification
 
 ### How to run the service
-1. Make sure any dependent services are running using the following service-manager command `sm --start PARTNERSHIP_IDENTIFICATION_ALL -r`
-2. Stop the frontend in service manager using `sm --stop PARTNERSHIP_IDENTIFICATION`
+1. Make sure any dependent services are running using the following service-manager command `sm2 --start PARTNERSHIP_IDENTIFICATION_ALL`
+2. Stop the frontend in service manager using `sm2 --stop PARTNERSHIP_IDENTIFICATION`
 3. Run the frontend locally using
-   `sbt 'run 9987 -Dapplication.router=testOnlyDoNotUseInAppConf.Routes'`
+   `sbt 'run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes'`
 
 ### Unit Testing
 
@@ -13,20 +13,20 @@ From the terminal console open an `sbt` shell and run `test` task
 
 ### Integration Testing
 
-From a terminal console open an `sbt` shell and run the `IntegrationTest / test` task.
+From a terminal console open an `sbt` shell and run the `it / test` task.
 ```
 sbt
 
-[partnership-identification] $ IntegrationTest / test
+[partnership-identification] $ it / test
 ```
 
 By default, for each ISpec test a new JVM will run and all tests will run sequentially.  
-To run all ISpec tests in a single JVM start sbt with the -DisADevMachine=true property and then run `IntegrationTest / test` task:
+To run all ISpec tests in a single JVM start sbt with the -DisADevMachine=true property and then run `it / test` task:
 
 ```
 sbt -DisADevMachine=true
 
-[partnership-identification] $ IntegrationTest / test
+[partnership-identification] $ it / test
 ```
 
 ### Testing Endpoints
@@ -39,7 +39,7 @@ See the [TestREADME](TestREADME.md) for more information on how to use our stubs
 Creates a new journeyId and stores it in the database
 
 ##### Request:
-No body is required for this request
+Nobody is required for this request
 
 ##### Response:
 Status: **Created(201)**
@@ -151,7 +151,7 @@ Example request URI:
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
+This API is feature switched behind the `Use stub for submissions to DES` switch, so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -197,7 +197,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
+This API is feature switched behind the `Use stub for submissions to DES` switch, so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -243,7 +243,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
+This API is feature switched behind the `Use stub for submissions to DES` switch, so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -290,7 +290,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
+This API is feature switched behind the `Use stub for submissions to DES` switch, so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:
@@ -337,7 +337,7 @@ or
 
 ___
 Submits a registration request to the downstream Register API.
-This API is feature switched behind the `Use stub for submissions to DES` switch so it can be stubbed using the Register test endpoint described in the TestREADME.
+This API is feature switched behind the `Use stub for submissions to DES` switch, so it can be stubbed using the Register test endpoint described in the TestREADME.
 
 ##### Request:
 Body:

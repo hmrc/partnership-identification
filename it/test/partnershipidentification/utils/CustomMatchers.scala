@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.utils
+package partnershipidentification.utils
 
 import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import play.api.libs.json.Reads

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.utils
+package partnershipidentification.utils
 
 import org.scalatest.{BeforeAndAfterEach, Suite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -38,7 +38,7 @@ trait JourneyDataMongoHelper extends BeforeAndAfterEach {
         Json.obj(
         "_id" -> journeyId,
         "authInternalId" -> authInternalId) ++ data
-      ).toFuture().map(_ => Unit)
+      ).toFuture().map(_ => ())
     )
 
   override def beforeEach(): Unit = {

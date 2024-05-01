@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.connectors
+package partnershipidentification.connectors
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
+import partnershipidentification.utils.ComponentSpecHelper
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
-import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser.{Failure, RegisterWithMultipleIdentifiersFailure, RegisterWithMultipleIdentifiersSuccess}
+import partnershipidentification.assets.TestConstants._
+import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersConnector
+import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser._
 import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.{FeatureSwitching, StubRegisterWithIdentifiers}
-import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, RegisterWithMultipleIdentifiersStub}
-import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
 
 
 class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper with AuthStub with RegisterWithMultipleIdentifiersStub with FeatureSwitching {
@@ -40,7 +41,7 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
 
           stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
           val result = connector.register(testGeneralPartnershipjsonBody, testRegime)
-          await(result) mustBe (RegisterWithMultipleIdentifiersSuccess(testSafeId))
+          await(result) mustBe RegisterWithMultipleIdentifiersSuccess(testSafeId)
         }
       }
     }
@@ -83,7 +84,7 @@ class RegisterWithMultipleIdentifiersConnectorISpec extends ComponentSpecHelper 
 
           stubRegisterGeneralPartnershipWithMultipleIdentifiersSuccess(testSautr, testRegime)(OK, testSafeId)
           val result = connector.register(testGeneralPartnershipjsonBody, testRegime)
-          await(result) mustBe (RegisterWithMultipleIdentifiersSuccess(testSafeId))
+          await(result) mustBe RegisterWithMultipleIdentifiersSuccess(testSafeId)
         }
       }
     }
