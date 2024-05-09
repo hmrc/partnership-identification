@@ -47,8 +47,7 @@ class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponen
        |    ]
        |}""".stripMargin
 
-  val singleFailureResponseAsJson: JsObject = Json.parse(singleFailureResultAsString).as[JsObject]
-  val multipleFailureResponseAsJson: JsObject = Json.parse(multipleFailureResultAsString).as[JsObject]
+  private val multipleFailureResponseAsJson: JsObject = Json.parse(multipleFailureResultAsString).as[JsObject]
 
   def registerWithMultipleIdentifiers: Action[JsValue] = Action.async(parse.json) {
     implicit request =>

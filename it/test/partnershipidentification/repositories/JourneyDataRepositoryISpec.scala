@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.repositories
+package partnershipidentification.repositories
 
 import java.util.UUID
-
 import play.api.libs.json.{JsString, Json}
 import play.api.test.Helpers._
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants.{testInternalId, testJourneyId}
-import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
+import partnershipidentification.utils.ComponentSpecHelper
+import partnershipidentification.assets.TestConstants.{testInternalId, testJourneyId}
+import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository
 
 class JourneyDataRepositoryISpec extends ComponentSpecHelper {
 

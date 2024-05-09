@@ -32,6 +32,6 @@ case class PartnershipKnownFacts(postCode: Option[String],
 
 object PartnershipKnownFacts {
 
-  def sanitisePostCode(postCode: String): String = postCode.filterNot(_.isWhitespace).toUpperCase
+  private def sanitisePostCode(postCode: String): String = postCode.filterNot(_.isWhitespace).toUpperCase
 
 }

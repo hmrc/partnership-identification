@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.controllers
+package partnershipidentification.controllers
 
 import play.api.http.Status.UNAUTHORIZED
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
-import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, PartnershipKnownFactsStub}
-import uk.gov.hmrc.partnershipidentification.utils.ComponentSpecHelper
+import partnershipidentification.stubs.{AuthStub, PartnershipKnownFactsStub}
+import partnershipidentification.utils.ComponentSpecHelper
+import partnershipidentification.assets.TestConstants._
 
 class ValidatePartnershipInformationControllerISpec extends ComponentSpecHelper with PartnershipKnownFactsStub with AuthStub {
 

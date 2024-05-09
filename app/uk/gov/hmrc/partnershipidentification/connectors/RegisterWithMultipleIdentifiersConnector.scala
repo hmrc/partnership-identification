@@ -56,10 +56,10 @@ class RegisterWithMultipleIdentifiersConnector @Inject()(http: HttpClient,
 
 object RegisterWithMultipleIdentifiersHttpParser {
 
-  val IdentificationKey = "identification"
-  val IdentificationTypeKey = "idType"
-  val IdentificationValueKey = "idValue"
-  val SafeIdKey = "SAFEID"
+  private val IdentificationKey = "identification"
+  private val IdentificationTypeKey = "idType"
+  private val IdentificationValueKey = "idValue"
+  private val SafeIdKey = "SAFEID"
 
   implicit object RegisterWithMultipleIdentifiersHttpReads extends HttpReads[RegisterWithMultipleIdentifiersResult] {
 

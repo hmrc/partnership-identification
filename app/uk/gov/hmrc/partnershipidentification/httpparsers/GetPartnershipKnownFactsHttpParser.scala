@@ -23,16 +23,16 @@ import uk.gov.hmrc.partnershipidentification.models.PartnershipKnownFacts
 
 object GetPartnershipKnownFactsHttpParser {
 
-  val postCodeKey = "postCode"
+  private val postCodeKey = "postCode"
 
-  val correspondenceDetailsKey = "correspondenceDetails"
-  val correspondencePostCodeKey = "correspondencePostCode"
+  private val correspondenceDetailsKey = "correspondenceDetails"
+  private val correspondencePostCodeKey = "correspondencePostCode"
 
-  val basePostCodeKey = "basePostCode"
+  private val basePostCodeKey = "basePostCode"
 
-  val commsPostCodeKey = "commsPostCode"
+  private val commsPostCodeKey = "commsPostCode"
 
-  val traderPostCodeKey = "traderPostCode"
+  private val traderPostCodeKey = "traderPostCode"
 
   implicit object GetPartnershipKnownFactsHttpReads extends HttpReads[PartnershipKnownFacts] {
     override def read(method: String, url: String, response: HttpResponse): PartnershipKnownFacts =

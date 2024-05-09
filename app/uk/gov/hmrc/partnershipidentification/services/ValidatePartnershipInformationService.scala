@@ -40,7 +40,7 @@ class ValidatePartnershipInformationService @Inject()(partnershipKnownFactsConne
 
 object ValidatePartnershipInformationService {
 
-  type ValidatePartnershipInformationResponse = Either[PostCodeDoesNotMatch.type, PostCodeMatched.type]
+  private type ValidatePartnershipInformationResponse = Either[PostCodeDoesNotMatch.type, PostCodeMatched.type]
 
   case object PostCodeMatched
 

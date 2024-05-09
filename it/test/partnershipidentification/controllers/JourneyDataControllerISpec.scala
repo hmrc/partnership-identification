@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.controllers
+package partnershipidentification.controllers
 
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsString, Json}
 import play.api.test.Helpers._
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants.testInternalId
+import partnershipidentification.stubs.{AuthStub, FakeJourneyIdGenerationService}
+import partnershipidentification.utils.{ComponentSpecHelper, CustomMatchers, JourneyDataMongoHelper}
+import partnershipidentification.assets.TestConstants.testInternalId
 import uk.gov.hmrc.partnershipidentification.services.JourneyIdGenerationService
-import uk.gov.hmrc.partnershipidentification.stubs.{AuthStub, FakeJourneyIdGenerationService}
-import uk.gov.hmrc.partnershipidentification.utils.{ComponentSpecHelper, CustomMatchers, JourneyDataMongoHelper}
 
 class JourneyDataControllerISpec extends ComponentSpecHelper with CustomMatchers with JourneyDataMongoHelper with AuthStub {
   lazy val testJourneyId = "testJourneyId"

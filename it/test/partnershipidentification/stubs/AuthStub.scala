@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.stubs
+package partnershipidentification.stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames
 import play.api.libs.json.{JsObject, Json, Writes}
 import play.api.test.Helpers.UNAUTHORIZED
-import uk.gov.hmrc.partnershipidentification.utils.WiremockMethods
+import partnershipidentification.utils.WiremockMethods
 
 trait AuthStub extends WiremockMethods {
 

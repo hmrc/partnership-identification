@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.partnershipidentification.stubs
+package partnershipidentification.stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.libs.json.{JsObject, JsValue, Json}
-import uk.gov.hmrc.partnershipidentification.assets.TestConstants._
-import uk.gov.hmrc.partnershipidentification.utils.WiremockMethods
+import partnershipidentification.assets.TestConstants._
+import partnershipidentification.utils.WiremockMethods
 
 trait PartnershipKnownFactsStub extends WiremockMethods {
 

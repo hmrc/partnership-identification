@@ -20,8 +20,8 @@ import uk.gov.hmrc.partnershipidentification.featureswitch.core.models.FeatureSw
 
 trait FeatureSwitching {
 
-  val FEATURE_SWITCH_ON = "true"
-  val FEATURE_SWITCH_OFF = "false"
+  private val FEATURE_SWITCH_ON = "true"
+  private val FEATURE_SWITCH_OFF = "false"
 
   def isEnabled(featureSwitch: FeatureSwitch): Boolean =
     sys.props get featureSwitch.configName contains FEATURE_SWITCH_ON
