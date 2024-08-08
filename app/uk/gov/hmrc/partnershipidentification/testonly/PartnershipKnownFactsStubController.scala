@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.partnershipidentification.testonly
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, InjectedController}
 
 import javax.inject.Singleton
@@ -29,42 +29,55 @@ class PartnershipKnownFactsStubController extends InjectedController {
     Future.successful(sautr match {
       case "0000000000" => NotFound
       case "0000000001" => Ok(Json.obj())
-      case _ => Ok(Json.obj(
-        "returnType" -> "P",
-        "postCode" -> "TF34ER",
-        "txpName" -> "Joe Bloggs",
-        "address4" -> "Test street",
-        "correspondenceDetails" -> Json.obj(
-          "corresEveningTelNum" -> "0123456789",
-          "corresMobileNum" -> "0123456789",
-          "corresFaxNum" -> "0123456789",
-          "corresEmailAdd" -> "joe@bloggs.com",
-          "correspondencePostCode" -> "AA11AA"
-        ),
-        "actingInCapacityDetails" -> Json.obj(
-          "aicTaxpayerName" -> "Joe Bloggs",
-          "capTelephoneNum" -> "0123456789",
-          "capEveningTelNum" -> "0123456789",
-          "capMobileNum" -> "0123456789",
-          "capFaxNum" -> "0123456789",
-          "capEmailAdd" -> "joe@bloggs.com"
-        ),
-        "baseTaxpayerName" -> "Joe Bloggs",
-        "taxpayerContactDetails" -> Json.obj(
-          "txpTelephoneNum" -> "0123456789",
-          "txpEveningTelNum" -> "0123456789",
-          "txpMobileNum" -> "0123456789",
-          "txpFaxNum" -> "0123456789",
-          "txpEmailAdd" -> "joe@bloggs.com"
-        ),
-        "basePostCode" -> "TF3 4ER",
-        "commsPostCode" -> "TF3 4ER",
-        "commsTelephoneNum" -> "0123456789",
-        "traderName" -> "Foo Bar",
-        "traderPostCode" -> "TF3 4ER",
-        "dateOfBirth" -> "2012-12-12"
-      ))
+      case _ => if(pillar2Data.contains(sautr)){
+        Ok(getKnownFacts(pillar2Data(sautr)))
+      } else
+        Ok(getKnownFacts())
     })
   }
+
+  private def getKnownFacts(postCode: String = "AA11AA"): JsObject = {
+    Json.obj(
+      "returnType" -> "P",
+      "postCode" -> "TF34ER",
+      "txpName" -> "Joe Bloggs",
+      "address4" -> "Test street",
+      "correspondenceDetails" -> Json.obj(
+        "corresEveningTelNum" -> "0123456789",
+        "corresMobileNum" -> "0123456789",
+        "corresFaxNum" -> "0123456789",
+        "corresEmailAdd" -> "joe@bloggs.com",
+        "correspondencePostCode" -> s"$postCode"
+      ),
+      "actingInCapacityDetails" -> Json.obj(
+        "aicTaxpayerName" -> "Joe Bloggs",
+        "capTelephoneNum" -> "0123456789",
+        "capEveningTelNum" -> "0123456789",
+        "capMobileNum" -> "0123456789",
+        "capFaxNum" -> "0123456789",
+        "capEmailAdd" -> "joe@bloggs.com"
+      ),
+      "baseTaxpayerName" -> "Joe Bloggs",
+      "taxpayerContactDetails" -> Json.obj(
+        "txpTelephoneNum" -> "0123456789",
+        "txpEveningTelNum" -> "0123456789",
+        "txpMobileNum" -> "0123456789",
+        "txpFaxNum" -> "0123456789",
+        "txpEmailAdd" -> "joe@bloggs.com"
+      ),
+      "basePostCode" -> "TF3 4ER",
+      "commsPostCode" -> "TF3 4ER",
+      "commsTelephoneNum" -> "0123456789",
+      "traderName" -> "Foo Bar",
+      "traderPostCode" -> "TF3 4ER",
+      "dateOfBirth" -> "2012-12-12"
+    )
+  }
+
+  private val pillar2Data: Map[String, String] = Map(
+    "1144440208" -> "AV1 2CD",
+    "2187647873" -> "DH9 6TD",
+    "1113456543" -> "RH20 4EQ"
+  )
 
 }
