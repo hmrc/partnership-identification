@@ -51,24 +51,15 @@ class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponen
 
   def registerWithMultipleIdentifiers: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      val sautr: String = (request.body \\ "sautr").map(_.as[String]).head
 
-      val stubbedSafeId = sautr match {
-        case "2111234407" => "XV0000100382302" // PPT Testing
-        case "1908789914" => "XX0000100382425" // PPT Testing
-        case "2908789918" => "XM0000100382429" // PPT Testing
-        case "4908789917" => "XL0000100382428" // PPT Testing
-        case "4111234406" => "XZ0000100382301"
-        case "1908789913" => "XH0000100382424"
-        case "8908789915" => "XJ0000100382426"
-        case "6908789916" => "XK0000100382427"
-        case _ => "X00000123456789"
-      }
+      val sautr: String = (request.body \\ "sautr").map(_.as[String]).head
 
        sautr match {
          case "0000000002" => Future.successful(BadRequest(singleFailureResultAsString))
          case "0000000003" => Future.successful(BadRequest(multipleFailureResponseAsJson))
-         case _ => Future.successful(Ok(createSuccessResponse(stubbedSafeId)))
+         case _ =>
+           val stubbedSafeId: String = if(e2eTestData.contains(sautr)) e2eTestData(sautr) else "X00000123456789"
+           Future.successful(Ok(createSuccessResponse(stubbedSafeId)))
        }
 
   }
@@ -82,4 +73,23 @@ class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponen
         )
       )
     )
+
+  lazy private val plasticPackagingTaxData: Map[String, String] = Map(
+    "2111234407" -> "XV0000100382302",
+    "1908789914" -> "XX0000100382425",
+    "2908789918" -> "XM0000100382429",
+    "4908789917" -> "XL0000100382428",
+    "4111234406" -> "XZ0000100382301",
+    "1908789913" -> "XH0000100382424",
+    "8908789915" -> "XJ0000100382426",
+    "6908789916" -> "XK0000100382427"
+  )
+
+  lazy private val pillar2Data: Map[String, String] = Map(
+    "1144440208" -> "XL0000100028993",
+    "2187647873" -> "XW0000100029017",
+    "1113456543" -> "XS0000100029021"
+  )
+
+  lazy private val e2eTestData: Map[String, String] = plasticPackagingTaxData ++ pillar2Data
 }
