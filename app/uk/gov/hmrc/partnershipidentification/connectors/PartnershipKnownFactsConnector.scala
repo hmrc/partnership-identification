@@ -16,17 +16,18 @@
 
 package uk.gov.hmrc.partnershipidentification.connectors
 
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.connectors.PartnershipKnownFactsConnector.{PartnershipReturnType, ReturnTypeKey}
 import uk.gov.hmrc.partnershipidentification.httpparsers.GetPartnershipKnownFactsHttpParser._
 import uk.gov.hmrc.partnershipidentification.models.PartnershipKnownFacts
 
+import java.net.URL
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PartnershipKnownFactsConnector @Inject()(http: HttpClient,
+class PartnershipKnownFactsConnector @Inject()(http: HttpClientV2,
                                                appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
 
@@ -38,16 +39,9 @@ class PartnershipKnownFactsConnector @Inject()(http: HttpClient,
       appConfig.desEnvironmentHeader
     )
 
-    http.GET(
-      url = appConfig.getPartnershipKnownFactsUrl(sautr: String),
-      queryParams = Seq(ReturnTypeKey -> PartnershipReturnType),
-      headers = extraHeaders
-    )
-
+    // ' + "?returnType=P" ' is the equivalent of the httpClient GET .withQuery(ReturnTypeKey -> PartnershipReturnType)
+    http.get(new URL(appConfig.getPartnershipKnownFactsUrl(sautr) + "?returnType=P"))
+      .setHeader(extraHeaders: _*)
+      .execute[PartnershipKnownFacts]
   }
-}
-
-object PartnershipKnownFactsConnector {
-  val ReturnTypeKey: String = "returnType"
-  val PartnershipReturnType: String = "P"
 }
