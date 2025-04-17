@@ -8,7 +8,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test)
   .settings(
     ThisBuild / majorVersion := 0,
-    ThisBuild / scalaVersion := "2.13.12")
+    ThisBuild / scalaVersion := "2.13.16")
   .settings(scalacOptions ++= Seq(
     "-Wconf:src=routes/.*:s",
     "-Wconf:cat=unused-imports&src=html/.*:s"
