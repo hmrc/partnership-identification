@@ -16,19 +16,19 @@
 
 package uk.gov.hmrc.partnershipidentification.repositories
 
+import javax.inject.{Inject, Singleton}
 import org.mongodb.scala.bson.conversions.Bson
+import org.mongodb.scala.model.*
 import org.mongodb.scala.model.Indexes.ascending
-import org.mongodb.scala.model._
-import play.api.libs.json._
-import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository._
+import play.api.libs.json.*
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
-
+import uk.gov.hmrc.partnershipidentification.config.AppConfig
+import JourneyDataRepositorySupport._
 import java.time.Instant
 import java.util.concurrent.TimeUnit
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import org.mongodb.scala.SingleObservableFuture
 
 @Singleton
 class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
@@ -80,12 +80,12 @@ class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
 
 }
 
-object JourneyDataRepository {
-  private val JourneyIdKey: String = "_id"
-  private val AuthInternalIdKey: String = "authInternalId"
-  private val CreationTimestampKey: String = "creationTimestamp"
+object JourneyDataRepositorySupport {
+   val JourneyIdKey: String = "_id"
+   val AuthInternalIdKey: String = "authInternalId"
+   val CreationTimestampKey: String = "creationTimestamp"
 
-  private def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
+   def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
     keys = ascending(CreationTimestampKey),
     indexOptions = IndexOptions()
       .name("PartnershipInformationExpires")

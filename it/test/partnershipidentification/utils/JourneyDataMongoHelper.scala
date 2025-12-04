@@ -16,10 +16,11 @@
 
 package partnershipidentification.utils
 
+import org.mongodb.scala.SingleObservableFuture
 import org.scalatest.{BeforeAndAfterEach, Suite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.libs.json.{JsObject, Json}
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
