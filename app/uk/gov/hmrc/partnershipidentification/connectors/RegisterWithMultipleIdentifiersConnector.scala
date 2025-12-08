@@ -17,14 +17,14 @@
 package uk.gov.hmrc.partnershipidentification.connectors
 
 import play.api.http.Status.OK
-import play.api.libs.json._
+import play.api.libs.json.*
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser._
+import uk.gov.hmrc.partnershipidentification.connectors.RegisterWithMultipleIdentifiersHttpParser.*
 
-import java.net.URL
+import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,7 +41,9 @@ class RegisterWithMultipleIdentifiersConnector @Inject()(http: HttpClientV2,
       "Content-Type" -> "application/json"
     )
 
-    http.post(new URL(appConfig.getRegisterWithMultipleIdentifiersUrl(regime)))
+    val url = URI(appConfig.getRegisterWithMultipleIdentifiersUrl(regime)).toURL
+
+    http.post(url)
       .setHeader(extraHeaders*)
       .withBody(jsonBody)
       .execute[RegisterWithMultipleIdentifiersResult](using RegisterWithMultipleIdentifiersHttpReads, ec)

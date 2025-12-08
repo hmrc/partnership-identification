@@ -1,5 +1,5 @@
-import uk.gov.hmrc.DefaultBuildSettings
 import play.sbt.PlayImport.PlayKeys.playDefaultPort
+import uk.gov.hmrc.DefaultBuildSettings
 
 val appName = "partnership-identification"
 
@@ -18,11 +18,11 @@ lazy val microservice = Project(appName, file("."))
   .settings(ScoverageSettings.settings *)
   .settings(playDefaultPort := 9987)
   .settings(
-      Test/javaOptions ++=Seq(
-          "--add-opens=java.base/java.lang=ALL-UNNAMED",
-          "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
-          "-XX:+EnableDynamicAgentLoading",
-      )
+    Test / javaOptions ++= Seq(
+      "--add-opens=java.base/java.lang=ALL-UNNAMED",
+      "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+      "-XX:+EnableDynamicAgentLoading",
+    )
   )
 
 lazy val it = project

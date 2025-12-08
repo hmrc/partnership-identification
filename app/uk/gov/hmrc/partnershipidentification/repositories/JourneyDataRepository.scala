@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.partnershipidentification.repositories
 
-import javax.inject.{Inject, Singleton}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.*
 import org.mongodb.scala.model.Indexes.ascending
@@ -24,11 +23,12 @@ import play.api.libs.json.*
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import JourneyDataRepositorySupport._
+import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepositorySupport.*
+
 import java.time.Instant
 import java.util.concurrent.TimeUnit
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import org.mongodb.scala.SingleObservableFuture
 
 @Singleton
 class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
