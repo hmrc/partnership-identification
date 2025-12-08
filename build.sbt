@@ -8,11 +8,12 @@ lazy val microservice = Project(appName, file("."))
   .settings(libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test)
   .settings(
     ThisBuild / majorVersion := 0,
-    ThisBuild / scalaVersion := "3.3.6")
+    ThisBuild / scalaVersion := "3.7.4")
   .settings(scalacOptions ++= Seq(
     "-Wconf:src=routes/.*:s",
     "-Wconf:msg=unused import&src=html/.*:s",
-    "-Wconf:msg=Flag.*repeatedly:s"
+    "-Wconf:msg=Flag.*repeatedly:s",
+    "-Wconf:msg=Implicit parameters should be provided with a `using` clause:s"
   ))
   .settings(ScoverageSettings.settings *)
   .settings(playDefaultPort := 9987)

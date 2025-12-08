@@ -31,7 +31,7 @@ class ValidatePartnershipInformationService @Inject()(partnershipKnownFactsConne
                postCode: String
               )(implicit hc: HeaderCarrier): Future[ValidatePartnershipInformationResponse] =
     partnershipKnownFactsConnector.getPartnershipKnownFacts(saUtr).map {
-      case knownFacts if knownFacts contains postCode =>
+      case knownFacts if knownFacts.contains(postCode) =>
         Right(PostCodeMatched)
       case _ =>
         Left(PostCodeDoesNotMatch)

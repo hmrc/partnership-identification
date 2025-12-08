@@ -41,7 +41,7 @@ class PartnershipKnownFactsConnector @Inject()(http: HttpClientV2,
 
     // ' + "?returnType=P" ' is the equivalent of the httpClient GET .withQuery(ReturnTypeKey -> PartnershipReturnType)
     http.get(new URL(appConfig.getPartnershipKnownFactsUrl(sautr) + "?returnType=P"))
-      .setHeader(extraHeaders: _*)
+      .setHeader(extraHeaders*)
       .execute[PartnershipKnownFacts]
   }
 }

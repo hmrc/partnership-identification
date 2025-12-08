@@ -42,9 +42,9 @@ class RegisterWithMultipleIdentifiersConnector @Inject()(http: HttpClientV2,
     )
 
     http.post(new URL(appConfig.getRegisterWithMultipleIdentifiersUrl(regime)))
-      .setHeader(extraHeaders: _*)
+      .setHeader(extraHeaders*)
       .withBody(jsonBody)
-      .execute[RegisterWithMultipleIdentifiersResult](RegisterWithMultipleIdentifiersHttpReads, ec)
+      .execute[RegisterWithMultipleIdentifiersResult](using RegisterWithMultipleIdentifiersHttpReads, ec)
   }
 
 }
