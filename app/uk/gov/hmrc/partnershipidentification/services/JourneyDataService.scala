@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.partnershipidentification.services
 
+import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsObject, JsValue}
 import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository
-
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

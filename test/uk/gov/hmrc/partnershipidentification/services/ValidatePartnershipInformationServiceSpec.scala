@@ -17,9 +17,11 @@
 package uk.gov.hmrc.partnershipidentification.services
 
 import helpers.TestConstants._
-import org.mockito.scalatest.{IdiomaticMockito, ResetMocksAfterEachTest}
+import org.mockito.Mockito.when
 import org.scalatest.matchers.must.Matchers
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.partnershipidentification.connectors.PartnershipKnownFactsConnector
@@ -30,7 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class ValidatePartnershipInformationServiceSpec extends AnyWordSpec with Matchers with IdiomaticMockito with ResetMocksAfterEachTest {
+class ValidatePartnershipInformationServiceSpec extends AnyWordSpec with Matchers with MockitoSugar{
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
 
@@ -43,13 +45,13 @@ class ValidatePartnershipInformationServiceSpec extends AnyWordSpec with Matcher
     "return a matched response" when {
       "the data exists in the database" in {
 
-        mockKnownFactsConnector.getPartnershipKnownFacts(testSautr) returns Future(PartnershipKnownFacts(
+        when(mockKnownFactsConnector.getPartnershipKnownFacts(eqTo(testSautr))(any[HeaderCarrier])).thenReturn(Future.successful(PartnershipKnownFacts(
           postCode = Some(testPostcode),
           correspondencePostCode = Some(testCorrespondencePostCode),
           basePostCode = Some(testBasePostCode),
           commsPostCode = Some(testCommsPostCode),
           traderPostCode = Some(testTraderPostCode)
-        ))
+        )))
 
         await(TestJourneyDataService.validate(testSautr, testPostcode)) mustBe Right(PostCodeMatched)
 
@@ -58,9 +60,9 @@ class ValidatePartnershipInformationServiceSpec extends AnyWordSpec with Matcher
     "return an unmatched response" when {
       "the data does not exist in the database" in {
 
-        mockKnownFactsConnector.getPartnershipKnownFacts(testSautr) returns Future(PartnershipKnownFacts(
+        when(mockKnownFactsConnector.getPartnershipKnownFacts(eqTo(testSautr))(any[HeaderCarrier])).thenReturn(Future.successful(PartnershipKnownFacts(
           None, None, None, None, None
-        ))
+        )))
 
         await(TestJourneyDataService.validate(testSautr, testPostcode)) mustBe Left(PostCodeDoesNotMatch)
       }

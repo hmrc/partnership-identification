@@ -17,13 +17,13 @@
 package uk.gov.hmrc.partnershipidentification.repositories
 
 import org.mongodb.scala.bson.conversions.Bson
+import org.mongodb.scala.model.*
 import org.mongodb.scala.model.Indexes.ascending
-import org.mongodb.scala.model._
-import play.api.libs.json._
-import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepository._
+import play.api.libs.json.*
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
+import uk.gov.hmrc.partnershipidentification.config.AppConfig
+import uk.gov.hmrc.partnershipidentification.repositories.JourneyDataRepositorySupport.*
 
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -80,12 +80,12 @@ class JourneyDataRepository @Inject()(mongoComponent: MongoComponent,
 
 }
 
-object JourneyDataRepository {
-  private val JourneyIdKey: String = "_id"
-  private val AuthInternalIdKey: String = "authInternalId"
-  private val CreationTimestampKey: String = "creationTimestamp"
+object JourneyDataRepositorySupport {
+   val JourneyIdKey: String = "_id"
+   val AuthInternalIdKey: String = "authInternalId"
+   val CreationTimestampKey: String = "creationTimestamp"
 
-  private def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
+   def timeToLiveIndex(timeToLiveDuration: Long): IndexModel = IndexModel(
     keys = ascending(CreationTimestampKey),
     indexOptions = IndexOptions()
       .name("PartnershipInformationExpires")

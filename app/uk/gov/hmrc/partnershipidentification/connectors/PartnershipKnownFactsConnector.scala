@@ -19,10 +19,10 @@ package uk.gov.hmrc.partnershipidentification.connectors
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.partnershipidentification.config.AppConfig
-import uk.gov.hmrc.partnershipidentification.httpparsers.GetPartnershipKnownFactsHttpParser._
+import uk.gov.hmrc.partnershipidentification.httpparsers.GetPartnershipKnownFactsHttpParser.*
 import uk.gov.hmrc.partnershipidentification.models.PartnershipKnownFacts
 
-import java.net.URL
+import java.net.URI
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,9 +39,11 @@ class PartnershipKnownFactsConnector @Inject()(http: HttpClientV2,
       appConfig.desEnvironmentHeader
     )
 
+    val url = URI(appConfig.getPartnershipKnownFactsUrl(sautr) + "?returnType=P").toURL
+
     // ' + "?returnType=P" ' is the equivalent of the httpClient GET .withQuery(ReturnTypeKey -> PartnershipReturnType)
-    http.get(new URL(appConfig.getPartnershipKnownFactsUrl(sautr) + "?returnType=P"))
-      .setHeader(extraHeaders: _*)
+    http.get(url)
+      .setHeader(extraHeaders*)
       .execute[PartnershipKnownFacts]
   }
 }
