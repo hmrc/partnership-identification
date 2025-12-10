@@ -17,13 +17,15 @@
 package uk.gov.hmrc.partnershipidentification.testonly
 
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.{Action, AnyContent, InjectedController}
+import play.api.mvc.{Action, AnyContent, ControllerComponents, InjectedController}
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class PartnershipKnownFactsStubController extends InjectedController {
+class PartnershipKnownFactsStubController @Inject() (controllerComponents: ControllerComponents) extends InjectedController {
+
+  setControllerComponents(controllerComponents)
 
   def getPartnershipKnownFacts(sautr: String): Action[AnyContent] = Action.async {
     Future.successful(sautr match {

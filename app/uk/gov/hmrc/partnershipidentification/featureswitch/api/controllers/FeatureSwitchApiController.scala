@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.partnershipidentification.featureswitch.api.controllers
 
-import play.api.Configuration
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, InjectedController}
+import play.api.mvc.{Action, AnyContent, ControllerComponents, InjectedController}
 import uk.gov.hmrc.partnershipidentification.featureswitch.api.services.FeatureSwitchService
 import uk.gov.hmrc.partnershipidentification.featureswitch.core.config.FeatureSwitching
 import uk.gov.hmrc.partnershipidentification.featureswitch.core.models.FeatureSwitchSetting
@@ -26,9 +25,10 @@ import uk.gov.hmrc.partnershipidentification.featureswitch.core.models.FeatureSw
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class FeatureSwitchApiController @Inject()(config: Configuration,
-                                           featureSwitchService: FeatureSwitchService
+class FeatureSwitchApiController @Inject()(featureSwitchService: FeatureSwitchService, controllerComponents: ControllerComponents
                                           ) extends InjectedController with FeatureSwitching {
+  setControllerComponents(controllerComponents)
+
   def getFeatureSwitches(): Action[AnyContent] = Action {
     Ok(Json.toJson(featureSwitchService.getFeatureSwitches()))
   }
