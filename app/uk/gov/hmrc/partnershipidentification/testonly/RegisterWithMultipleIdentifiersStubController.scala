@@ -91,5 +91,16 @@ class RegisterWithMultipleIdentifiersStubController @Inject()(controllerComponen
     "1113456543" -> "XS0000100029021"
   )
 
-  lazy private val e2eTestData: Map[String, String] = plasticPackagingTaxData ++ pillar2Data
+  lazy private val mmtarData: Map[String, String] = Map(
+    // LLPs
+    "6177013474" -> "XS0000100047519", // LLP 1 - OC332458
+    "9177012086" -> "XB0000100081585", // LLP 2 - OC403303
+    // General Partnerships
+    "1177000546" -> "XE0000100047940", // General Partnership 1
+    "6567843430" -> "XZ0000100048968", // General Partnership 2
+    // Limited Partnership
+    "2202020204" -> "XG0000100071000"  // Limited Partnership - BEECHDALE DEVELOPMENTS LIMITED
+  )
+
+  lazy private val e2eTestData: Map[String, String] = plasticPackagingTaxData ++ pillar2Data ++ mmtarData
 }

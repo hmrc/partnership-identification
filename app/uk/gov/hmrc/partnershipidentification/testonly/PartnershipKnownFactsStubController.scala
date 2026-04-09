@@ -31,10 +31,14 @@ class PartnershipKnownFactsStubController @Inject() (controllerComponents: Contr
     Future.successful(sautr match {
       case "0000000000" => NotFound
       case "0000000001" => Ok(Json.obj())
-      case _ => if(pillar2Data.contains(sautr)){
-        Ok(getKnownFacts(pillar2Data(sautr)))
-      } else
-        Ok(getKnownFacts())
+      case _ =>
+        if (pillar2Data.contains(sautr)) {
+          Ok(getKnownFacts(pillar2Data(sautr)))
+        } else if (mmtarData.contains(sautr)) {
+          Ok(getKnownFacts(mmtarData(sautr)))
+        } else {
+          Ok(getKnownFacts())
+        }
     })
   }
 
@@ -80,6 +84,17 @@ class PartnershipKnownFactsStubController @Inject() (controllerComponents: Contr
     "1144440208" -> "AV1 2CD",
     "2187647873" -> "DH9 6TD",
     "1113456543" -> "RH20 4EQ"
+  )
+
+  private val mmtarData: Map[String, String] = Map(
+    // LLPs
+    "6177013474" -> "WC2R 1AT", // LLP 1
+    "9177012086" -> "N17 0DH",  // LLP 2
+    // General Partnerships
+    "1177000546" -> "TF3 4ER",  // General Partnership 1
+    "6567843430" -> "TF3 4ER",  // General Partnership 2
+    // Limited Partnership
+    "2202020204" -> "BN12 4XJ"  // Limited Partnership - BEECHDALE DEVELOPMENTS LIMITED
   )
 
 }
